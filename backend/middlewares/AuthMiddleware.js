@@ -1,16 +1,16 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
-  console.log("authHeader", authHeader);
+  console.log('authHeader', authHeader);
 
   if (!authHeader) {
-    return res.status(401).json({ error: "No token provided" });
+    return res.status(401).json({ error: 'No token provided' });
   }
 
-  const parts = authHeader.split(" ");
-  if (parts.length !== 2 || parts[0] !== "Bearer") {
-    return res.status(401).json({ error: "Token error" });
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    return res.status(401).json({ error: 'Token error' });
   }
 
   const token = parts[1];
@@ -24,7 +24,7 @@ function authMiddleware(req, res, next) {
     };
     next();
   } catch (err) {
-    return res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 }
 

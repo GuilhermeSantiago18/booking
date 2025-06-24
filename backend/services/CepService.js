@@ -1,11 +1,11 @@
-const axios = require("axios");
-const CustomError = require("../errors/CustomError");
+const axios = require('axios');
+const CustomError = require('../errors/CustomError');
 
 async function fetchAddressByCep(cep) {
-  const cleanCep = cep.replace(/\D/g, "");
+  const cleanCep = cep.replace(/\D/g, '');
 
   if (cleanCep.length !== 8) {
-    throw new CustomError("Invalid CEP format", 400);
+    throw new CustomError('Invalid CEP format', 400);
   }
 
   const response = await axios.get(
@@ -13,7 +13,7 @@ async function fetchAddressByCep(cep) {
   );
 
   if (response.data.erro) {
-    throw new CustomError("CEP not found", 404);
+    throw new CustomError('CEP not found', 404);
   }
 
   const { localidade, estado, bairro, logradouro } = response.data;

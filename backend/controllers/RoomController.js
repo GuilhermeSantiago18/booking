@@ -1,4 +1,4 @@
-const RoomService = require("../services/RoomService");
+const RoomService = require('../services/RoomService');
 
 async function createRoom(req, res, next) {
   try {
@@ -39,7 +39,7 @@ async function updateRoom(req, res) {
 async function deleteRoom(req, res) {
   try {
     await RoomService.deleteRoom(req.params.id);
-    res.json({ message: "Room deleted successfully" });
+    res.json({ message: 'Room deleted successfully' });
   } catch (error) {
     next(error);
   }

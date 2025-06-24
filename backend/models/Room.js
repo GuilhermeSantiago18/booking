@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const Room = sequelize.define(
-  "Room",
+  'Room',
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
@@ -25,7 +25,7 @@ const Room = sequelize.define(
     },
   },
   {
-    tableName: "rooms",
+    tableName: 'rooms',
     timestamps: true,
     underscored: true,
   },
