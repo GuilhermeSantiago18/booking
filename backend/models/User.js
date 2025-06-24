@@ -63,7 +63,7 @@ const User = sequelize.define('User', {
   },
 
   state: {
-    type: DataTypes.STRING(2),
+    type: DataTypes.STRING,
     allowNull: false,
   },
 
