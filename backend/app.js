@@ -15,10 +15,11 @@ app.get('/', (req, res) => {
 });
 
 
-app.use(errorHandler);
+
 app.use('/users', UserRoutes)
 app.use('/rooms', authMiddleware, RoomRoutes);
 
 
+app.use(errorHandler);
 
 module.exports = app;

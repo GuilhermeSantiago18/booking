@@ -7,7 +7,7 @@ async function createRoom(data) {
 
   const existingRoom = await Room.findOne({ where: { name } });
   if (existingRoom) {
-    throw CustomError('Room name already exists', 409);
+    throw new CustomError('Room name already exists', 409);
   }
 
 
@@ -38,13 +38,13 @@ async function getRoomById(id) {
 async function updateRoom(id, data) {
   const room = await Room.findByPk(id);
   if (!room) {
-    throw CustomError('Room not found', 404);
+    throw new CustomError('Room not found', 404);
   }
 
   if (data.name && data.name !== room.name) {
     const existingRoom = await Room.findOne({ where: { name: data.name } });
     if (existingRoom) {
-      throw CustomError('Room name already exists', 409);
+      throw new CustomError('Room name already exists', 409);
     }
   }
 
@@ -62,12 +62,12 @@ async function updateRoom(id, data) {
 async function deleteRoom(id) {
   const room = await Room.findByPk(id);
   if (!room) {
-    throw CustomError('Room not found', 404);
+    throw new CustomError('Room not found', 404);
   }
 
 //   const booking = await Booking.findOne({ where: { roomId: id } });
 //   if (booking) {
-//     throw CustomError('Cannot delete room with existing bookings', 400);
+//     throw new CustomError('Cannot delete room with existing bookings', 400);
 //   }
 
   await room.destroy();

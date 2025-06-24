@@ -7,7 +7,7 @@ const CustomError = require('../errors/CustomError');
 async function registerClient(data) {
   const {
     firstName, lastName, email, password,
-    postalCode, number, complement,
+    postalCode, number, complement, role
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
@@ -33,7 +33,7 @@ async function registerClient(data) {
     district,
     city,
     state,
-    role: 'client'
+    role: role
   });
 
   return user;
