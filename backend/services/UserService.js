@@ -2,6 +2,7 @@ const bcryptjs = require('bcryptjs')
 const User = require('../models/User');
 const { generateToken } = require('../utils/jwt');
 const { fetchAddressByCep } = require('./CepService');
+const CustomError = require('../errors/CustomError');
 
 async function registerClient(data) {
   const {
@@ -10,7 +11,7 @@ async function registerClient(data) {
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
-  if (userExists) throw new Error('Email already registered');
+  if (userExists) throw new CustomError('Email already registered', 409);
 
    const { street, district, city, state, cep } = await fetchAddressByCep(postalCode);
 
@@ -42,7 +43,7 @@ async function createAdmin(data) {
   const { email, password } = data;
 
   const userExists = await User.findOne({ where: { email } });
-  if (userExists) throw new Error('Email already registered');
+  if (userExists) throw new CustomError('Email already registered', 409);
 
   const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -66,10 +67,10 @@ async function createAdmin(data) {
 
 async function login({ email, password }) {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new Error('User not found');
+  if (!user) throw new CustomError('User not found', 404);
 
   const passwordValid = await bcryptjs.compare(password, user.password);
-  if (!passwordValid) throw new Error('Invalid password');
+  if (!passwordValid) throw new CustomError('Invalid password', 401);
 
   const token = generateToken({ id: user.id, role: user.role, email: user.email });
 
