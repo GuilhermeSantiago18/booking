@@ -1,11 +1,11 @@
 const RoomService = require('../services/RoomService');
 
-async function createRoom(req, res) {
+async function createRoom(req, res, next) {
   try {
     const room = await RoomService.createRoom(req.body);
     res.status(201).json(room);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ error: error.message });
+      next(error)
   }
 }
 
@@ -14,7 +14,7 @@ async function listRooms(req, res) {
     const rooms = await RoomService.listRooms();
     res.json(rooms);
   } catch (error) {
-    res.status(error.statusCode).json({ error: error.message });
+      next(error)
   }
 }
 
@@ -23,7 +23,7 @@ async function getRoomById(req, res) {
     const room = await RoomService.getRoomById(req.params.id);
     res.json(room);
   } catch (error) {
-    res.status(error.statusCode).json({ error: error.message });
+      next(error)
   }
 }
 
@@ -32,7 +32,7 @@ async function updateRoom(req, res) {
     const room = await RoomService.updateRoom(req.params.id, req.body);
     res.json(room);
   } catch (error) {
-    res.status(error.statusCode).json({ error: error.message });
+      next(error)
   }
 }
 
@@ -41,7 +41,7 @@ async function deleteRoom(req, res) {
     await RoomService.deleteRoom(req.params.id);
     res.json({ message: 'Room deleted successfully' });
   } catch (error) {
-    res.status(error.statusCode).json({ error: error.message });
+      next(error)
   }
 }
 

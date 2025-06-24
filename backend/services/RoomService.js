@@ -1,5 +1,5 @@
 const Room = require('../models/Room');
-const Booking = require('../models/Booking');
+// const Booking = require('../models/Booking');
 const CustomError = require('../errors/CustomError');
 
 async function createRoom(data) {
@@ -65,10 +65,10 @@ async function deleteRoom(id) {
     throw CustomError('Room not found', 404);
   }
 
-  const booking = await Booking.findOne({ where: { roomId: id } });
-  if (booking) {
-    throw CustomError('Cannot delete room with existing bookings', 400);
-  }
+//   const booking = await Booking.findOne({ where: { roomId: id } });
+//   if (booking) {
+//     throw CustomError('Cannot delete room with existing bookings', 400);
+//   }
 
   await room.destroy();
 }
