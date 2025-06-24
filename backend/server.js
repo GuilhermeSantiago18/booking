@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
       console.log(`Server connected http://localhost:${PORT}`);
     });
-
   } catch (error) {
     console.error('Error to connect no Database', error);
   }

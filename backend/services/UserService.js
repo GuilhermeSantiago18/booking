@@ -1,4 +1,4 @@
-const bcryptjs = require('bcryptjs')
+const bcryptjs = require('bcryptjs');
 const User = require('../models/User');
 const { generateToken } = require('../utils/jwt');
 const { fetchAddressByCep } = require('./CepService');
@@ -6,18 +6,23 @@ const CustomError = require('../errors/CustomError');
 
 async function registerClient(data) {
   const {
-    firstName, lastName, email, password,
-    postalCode, number, complement,
+    firstName,
+    lastName,
+    email,
+    password,
+    postalCode,
+    number,
+    complement,
+    role,
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
   if (userExists) throw new CustomError('Email already registered', 409);
 
-   const { street, district, city, state, cep } = await fetchAddressByCep(postalCode);
+  const { street, district, city, state, cep } =
+    await fetchAddressByCep(postalCode);
 
-   console.log('Endereco recebido:', { street, district, city, state });
-
-
+  console.log('Endereco recebido:', { street, district, city, state });
 
   const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -33,7 +38,7 @@ async function registerClient(data) {
     district,
     city,
     state,
-    role: 'client'
+    role: role,
   });
 
   return user;
@@ -59,7 +64,7 @@ async function createAdmin(data) {
     complement: '',
     district: 'Admin District',
     city: 'Admin City',
-    state: 'Admin State'
+    state: 'Admin State',
   });
 
   return user;
@@ -72,12 +77,14 @@ async function login({ email, password }) {
   const passwordValid = await bcryptjs.compare(password, user.password);
   if (!passwordValid) throw new CustomError('Invalid password', 401);
 
-  const token = generateToken({ id: user.id, role: user.role, email: user.email });
+  const token = generateToken({
+    id: user.id,
+    role: user.role,
+    email: user.email,
+  });
 
   return { user, token };
 }
-
-
 
 module.exports = {
   registerClient,
