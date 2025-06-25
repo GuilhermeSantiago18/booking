@@ -6,6 +6,7 @@ import { login } from '@/services/authService';
 import MainButton from '../buttons/MainButton';
 import CustomInput from '../Inputs/CustomInput';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
 
 export default function LoginForm() {
@@ -19,8 +20,7 @@ export default function LoginForm() {
     e.preventDefault();
     try {
       const loginResponse = await login({ email, password });
-      localStorage.setItem('token', loginResponse.data.token);
-      localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
+      Cookies.set('token', loginResponse.data.token, { path: '/', expires: 1 });
       toast.success(loginResponse.data.message);
       router.push('/dashboard/agendamentos');
     } catch (error) {

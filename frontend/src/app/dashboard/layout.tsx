@@ -3,6 +3,7 @@
 import Sidebar from '@/components/sidebar/Sidebar';
 import { useEffect, useState } from 'react';
 import { IUser } from '@/types/IUser';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<IUser | null>(null);

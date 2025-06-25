@@ -22,7 +22,7 @@ export const menuItems: IMenuItem[] = [
     roles: ['client', 'admin'],
   },
   {
-    href: '/dashboard/minha-conta',
+    href: '/dashboard/perfil',
     label: 'Minha Conta',
     icon: <User size={18} />,
     roles: ['client'],

@@ -21,7 +21,7 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     title: 'Logs do sistema',
     description: 'Acompanhe os registros de ações realizadas na aplicação.',
   },
-  '/dashboard/minha-conta': {
+  '/dashboard/perfil': {
     title: 'Minha Conta',
     description: 'Gerencie seus dados pessoais e preferências da conta.',
   },
