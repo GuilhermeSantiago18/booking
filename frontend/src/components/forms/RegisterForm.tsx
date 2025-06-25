@@ -7,6 +7,7 @@ import CustomInput from '../Inputs/CustomInput';
 import { checkCep } from '@/services/checkCep';
 import { register } from '@/services/authService';
 import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -40,15 +41,10 @@ export default function RegisterForm() {
 
     if (raw.length === 8) {
       try {
-        const data = await checkCep(raw);
+        const {data} = await checkCep(raw);
 
-        if (data.erro) {
-          alert('CEP inválido');
-          setAddress({ street: '', city: '', state: '', district: '' });
-          setNumber('');
-          setComplement('');
-          return;
-        }
+        if (data) {
+   
 
         setAddress({
           street: data.street || data.logradouro || '',
@@ -56,8 +52,12 @@ export default function RegisterForm() {
           state: data.state || data.uf || '',
           district: data.district || data.bairro || '',
         });
-      } catch (err) {
-        alert('Erro ao buscar o CEP');
+             }
+      } catch (error) {
+        if (error instanceof AxiosError && error.response) {
+          const errorMessage = error.response.data?.error || 'Erro inesperado';
+      toast.error(errorMessage);
+        }
       }
     } else {
       setAddress({ street: '', city: '', state: '', district: '' });
@@ -76,7 +76,7 @@ export default function RegisterForm() {
     !password ||
     !postalCode
   ) {
-    alert('Preencha todos os campos obrigatórios');
+    toast.error('Preencha todos os campos obrigatórios');
     return;
   }
 
@@ -96,13 +96,14 @@ export default function RegisterForm() {
     console.log("data register", JSON.stringify(dataRegister))
     const response = await register(dataRegister);
     console.log("RESPONSE ", response)
-    if (response || response === 201) {
+    if (response && response.status === 201) {
+      toast.success(response.data.message);
       router.push('/login');
     }
   } catch (error) {
   if (error instanceof AxiosError && error.response) {
     const errorMessage = error.response.data?.error || 'Erro inesperado';
-    alert(errorMessage);
+    toast.error(errorMessage);
   } else {
     alert('Erro inesperado. Tente novamente.');
   }
