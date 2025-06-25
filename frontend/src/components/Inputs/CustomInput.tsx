@@ -6,6 +6,7 @@ import { Eye, EyeOff } from 'lucide-react';
 interface InputWithTitleProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   titleRight?: string;
+  inputClassName?: string;
 }
 
 export default function CustomInput({
@@ -13,6 +14,7 @@ export default function CustomInput({
   titleRight,
   type = 'text',
   className = '',
+  inputClassName = '',
   ...props
 }: InputWithTitleProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +42,7 @@ export default function CustomInput({
         <input
           {...props}
           type={inputType}
-          className="w-full border border-gray-300 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-black font-montserrat text-sm leading-5 mb-4"
+          className={`w-full border border-gray-300 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-black font-montserrat text-sm leading-5 mb-4 ${inputClassName}`}
         />
 
         {isPasswordType && (
