@@ -29,7 +29,7 @@ export default function RegisterForm() {
   const [number, setNumber] = useState('');
   const [complement, setComplement] = useState('');
 
-  const inputBgClass = address.street ? 'bg-[#F0F0F0]' : 'bg-transparent';
+  const inputBgClass = address.city ? 'bg-[#F0F0F0]' : 'bg-transparent';
 
 
   const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +115,7 @@ export default function RegisterForm() {
 
 
   return (
-    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg mt-18">
+    <div className="w-full max-w-sm sm:max-w-md p-2">
       <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Cadastre-se</h2>
       <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md" onSubmit={handleSubmit}>
         <div className="flex gap-x-4">

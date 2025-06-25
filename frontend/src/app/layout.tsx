@@ -26,10 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Header />
+
       <body
         className={`${montserrat.variable} antialiased`}
       >
+        <Header />
         {children}
         <Toaster 
         position="top-right" 

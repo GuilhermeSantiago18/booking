@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { IUser } from '../../types/IUser';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { menuItems, IMenuItem } from './MenuItems';
+import { Menu } from 'lucide-react';
 
 
 export default function Sidebar({ firstName, lastName, role }: IUser) {
@@ -30,14 +31,14 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="text-black border px-3 py-1 rounded"
         >
-          Menu
+          <Menu />
         </button>
       </div>
 
       <aside
         className={`bg-gray-100 h-screen md:w-64 fixed top-0 left-0 transform ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 transition-transform duration-200 ease-in-out z-40`}
+        } md:translate-x-0 transition-transform duration-200 ease-in-out z-40 mt-0 md:mt-18`}
       >
         <div className="flex flex-col h-full p-4 justify-between">
           <nav className="flex flex-col gap-4">
