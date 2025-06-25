@@ -2,71 +2,166 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/services/authService';
 import MainButton from '../buttons/MainButton';
 import CustomInput from '../Inputs/CustomInput';
+import { checkCep } from '@/services/checkCep';
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const router = useRouter();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [cep, setCep] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [cep, setCep] = useState('');
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    state: '',
+    district: '',
+  });
+
+  const [number, setNumber] = useState('');
+  const [complement, setComplement] = useState('');
+
+  const inputBgClass = address.street ? 'bg-[#F0F0F0]' : 'bg-transparent';
 
 
-    const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, '');
-    const formatted = raw.replace(/^(\d{5})(\d{0,3})/, '$1-$2');
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '');
+    if (raw.length > 8) raw = raw.slice(0, 8);
+    const formatted = raw.length > 5 
+      ? raw.replace(/^(\d{5})(\d{0,3})/, '$1-$2')
+      : raw;
+
     setCep(formatted);
 
     if (raw.length === 8) {
-        try {
-        const res = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
-        const data = await res.json();
+      try {
+        const data = await checkCep(raw);
 
         if (data.erro) {
-            alert('CEP inválido');
-            return;
+          alert('CEP inválido');
+          setAddress({ street: '', city: '', state: '', district: '' });
+          setNumber('');
+          setComplement('');
+          return;
         }
 
         setAddress({
-            street: data.logradouro,
-            city: data.localidade,
-            state: data.uf,
+          street: data.street || data.logradouro || '',
+          city: data.city || data.localidade || '',
+          state: data.state || data.uf || '',
+          district: data.district || data.bairro || '',
         });
-        } catch (err) {
+      } catch (err) {
         alert('Erro ao buscar o CEP');
-        }
+      }
+    } else {
+      setAddress({ street: '', city: '', state: '', district: '' });
+      setNumber('');
+      setComplement('');
     }
-    };
-
-
+  };
 
   return (
-    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg">
-        <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Cadastre-se</h2>
-    <form
-        className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md"
-    >   
-        <div className='flex gap-x-4'>
-        <CustomInput label='Nome' titleRight='(Obrigatorio)' onChange={(e) => setEmail(e.target.value)} placeholder='Insira seu email'/>
-         <CustomInput label='Sobrenome' titleRight='(Obrigatorio)' onChange={(e) => setEmail(e.target.value)} placeholder='Insira seu email'/>
+    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg mt-18">
+      <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Cadastre-se</h2>
+      <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md">
+        <div className="flex gap-x-4">
+          <CustomInput
+            label="Nome"
+            titleRight="(Obrigatório)"
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="Ex: Jose"
+            value={firstName}
+          />
+          <CustomInput
+            label="Sobrenome"
+            titleRight="(Obrigatório)"
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Ex: Lima"
+            value={lastName}
+          />
         </div>
 
-        <CustomInput label='E-mail' titleRight='(Obrigatorio)' onChange={(e) => setEmail(e.target.value)} placeholder='Insira seu email'/>
-        <CustomInput label='Senha de acesso'  titleRight='(Obrigatorio)'  onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Insira sua senha'/>
-                <hr className="border-t border-gray-300 mb-4" />
+        <CustomInput
+          label="E-mail"
+          titleRight="(Obrigatório)"
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Insira seu email"
+          value={email}
+        />
+        <CustomInput
+          label="Senha de acesso"
+          titleRight="(Obrigatório)"
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="Insira sua senha"
+          value={password}
+        />
+        <hr className="border-t border-gray-300 mb-4" />
+        <CustomInput
+          label="CEP"
+          titleRight="(Obrigatório)"
+          value={cep}
+          onChange={handleCepChange}
+          maxLength={9}
+          placeholder="Insira seu CEP"
+        />
 
-        <CustomInput label='CEP'  
-        titleRight='(Obrigatorio)' 
-        value={cep}
-        onChange={handleCepChange}
-        maxLength={9}
-        placeholder='Insira seu CEP'/>
-        <MainButton children='Cadastrar-se' className='font-montserrat font-medium'  disabled={email.length === 0}/>
-        <div className="flex justify-between align-center w-full">
-      </div>
-    </form>
+        {address.street && (
+          <>
+            <CustomInput
+              label="Endereço"
+              value={address.street}
+              onChange={(e) => setAddress(prev => ({ ...prev, street: e.target.value }))}
+              placeholder="Rua, avenida, etc."
+               inputClassName={inputBgClass}
+            />
+            <CustomInput
+              label="Número"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              placeholder="Número"
+            />
+            <CustomInput
+              label="Complemento"
+              value={complement}
+              onChange={(e) => setComplement(e.target.value)}
+              placeholder="Apartamento, bloco, etc."
+            />
+            <CustomInput
+              label="Bairro"
+              value={address.district}
+              onChange={(e) => setAddress(prev => ({ ...prev, district: e.target.value }))}
+              placeholder="Bairro"
+              inputClassName={inputBgClass}
+            />
+            <CustomInput
+              label="Cidade"
+
+              value={address.city}
+              onChange={(e) => setAddress(prev => ({ ...prev, city: e.target.value }))}
+              placeholder="Cidade"
+              inputClassName={inputBgClass}
+            />
+            <CustomInput
+              label="Estado"
+              value={address.state}
+              onChange={(e) => setAddress(prev => ({ ...prev, state: e.target.value }))}
+              placeholder="Estado"
+                inputClassName={inputBgClass}
+            />
+          </>
+        )}
+
+        <MainButton
+          children="Cadastrar-se"
+          className="font-montserrat font-medium mt-2"
+          disabled={email.length === 0}
+        />
+      </form>
     </div>
   );
 }
