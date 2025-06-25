@@ -44,7 +44,7 @@ export default function LoginForm() {
        Ainda não tem um cadastro?
         </p>
         <a
-          href="/auth/register"
+          href="/register"
           className="underline mt-4 font-montserrat font-semibold text-xs mr-8"
         >
          Cadastre-se
