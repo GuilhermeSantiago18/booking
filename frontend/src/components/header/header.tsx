@@ -14,8 +14,8 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     description: 'Preencha seus dados para começar a usar o sistema.',
   },
   '/dashboard/agendamentos': {
-    title: 'Seus agendamentos',
-    description: 'Veja, crie e gerencie seus agendamentos com facilidade.',
+    title: 'Agendamento',
+    description: 'Acompanhe todos os seus agendamentos de forma simples',
   },
   '/dashboard/logs': {
     title: 'Logs do sistema',
@@ -43,26 +43,25 @@ export default function Header() {
 
   return (
     <header className="flex justify-between items-center w-full p-6 bg-[#F6F4F1] border-b-2 border-gray-300">
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-4">
-          <Image src="/assets/logo.svg" alt="Logo" width={60} height={60} />
-          {metadata && (
-            <div>
-              <h1 className="text-lg font-semibold">{metadata.title}</h1>
-              <p className="text-sm text-gray-600">{metadata.description}</p>
-            </div>
-          )}
-        </div>
+  <div className="flex items-center gap-4">
+    <Image src="/assets/logo.svg" alt="Logo" width={60} height={60} />
+    
+    {metadata && (
+      <div className="ml-0 md:ml-42">
+        <h1 className="text-2xl font-semibold font-montserrat">{metadata.title}</h1>
+        <p className="text-xs text-black font-medium font-montserrat">{metadata.description}</p>
       </div>
+    )}
+  </div>
 
-      {isLoginOrRegister && (
-        <MainButton
-          onClick={() => router.push(targetRoute)}
-          className="max-w-[150px] px-6 py-2 font-montserrat text-sm"
-        >
-          {buttonLabel}
-        </MainButton>
-      )}
-    </header>
-  );
+  {isLoginOrRegister && (
+    <MainButton
+      onClick={() => router.push(targetRoute)}
+      className="max-w-[150px] px-6 py-2 font-montserrat text-sm"
+    >
+      {buttonLabel}
+    </MainButton>
+  )}
+</header>
+  )
 }
