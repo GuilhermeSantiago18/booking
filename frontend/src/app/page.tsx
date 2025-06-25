@@ -8,7 +8,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) {
+    if (token) {
       router.replace('/login');
     } else {
       router.replace('/dashboard');
