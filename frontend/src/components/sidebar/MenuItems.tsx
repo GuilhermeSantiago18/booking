@@ -1,13 +1,14 @@
 import { CalendarRange, Logs, User } from 'lucide-react';
 
-export interface MenuItem {
+export interface IMenuItem {
   href: string;
   label: string;
   icon: React.ReactNode;
   roles: ('client' | 'admin')[];
 }
 
-export const menuItems: MenuItem[] = [
+
+export const menuItems: IMenuItem[] = [
   {
     href: '/dashboard/agendamentos',
     label: 'Agendamentos',

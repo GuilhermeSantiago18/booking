@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Usertype } from '../../types/User';
+import { IUser } from '../../types/IUser';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { menuItems, MenuItem } from './MenuItems';
+import { menuItems, IMenuItem } from './MenuItems';
+
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<Usertype | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
@@ -40,7 +41,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full p-4 justify-between">
           <nav className="flex flex-col gap-4">
-            {filteredMenuItems.map((link: MenuItem) => (
+            {filteredMenuItems.map((link: IMenuItem) => (
               <Link
                 key={link.href}
                 href={link.href}
