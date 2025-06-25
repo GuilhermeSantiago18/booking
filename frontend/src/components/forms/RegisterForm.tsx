@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import MainButton from '../buttons/MainButton';
 import CustomInput from '../Inputs/CustomInput';
 import { checkCep } from '@/services/checkCep';
+import { register } from '@/services/authService';
+import { AxiosError } from 'axios';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -13,7 +15,7 @@ export default function RegisterForm() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [cep, setCep] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [address, setAddress] = useState({
     street: '',
     city: '',
@@ -34,7 +36,7 @@ export default function RegisterForm() {
       ? raw.replace(/^(\d{5})(\d{0,3})/, '$1-$2')
       : raw;
 
-    setCep(formatted);
+    setPostalCode(formatted);
 
     if (raw.length === 8) {
       try {
@@ -64,10 +66,55 @@ export default function RegisterForm() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !password ||
+    !postalCode
+  ) {
+    alert('Preencha todos os campos obrigatórios');
+    return;
+  }
+
+  const dataRegister = {
+    firstName,
+    lastName,
+    email,
+    password,
+    postalCode,
+    ...address,
+    number,
+    complement,
+    role: 'client'
+  };
+
+  try {
+    console.log("data register", JSON.stringify(dataRegister))
+    const response = await register(dataRegister);
+    console.log("RESPONSE ", response)
+    if (response || response === 201) {
+      router.push('/login');
+    }
+  } catch (error) {
+  if (error instanceof AxiosError && error.response) {
+    const errorMessage = error.response.data?.error || 'Erro inesperado';
+    alert(errorMessage);
+  } else {
+    alert('Erro inesperado. Tente novamente.');
+  }
+  }
+};
+
+
+
   return (
     <div className="w-full max-w-sm sm:max-w-md md:max-w-lg mt-18">
       <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Cadastre-se</h2>
-      <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md">
+      <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md" onSubmit={handleSubmit}>
         <div className="flex gap-x-4">
           <CustomInput
             label="Nome"
@@ -104,7 +151,7 @@ export default function RegisterForm() {
         <CustomInput
           label="CEP"
           titleRight="(Obrigatório)"
-          value={cep}
+          value={postalCode}
           onChange={handleCepChange}
           maxLength={9}
           placeholder="Insira seu CEP"
@@ -157,6 +204,7 @@ export default function RegisterForm() {
         )}
 
         <MainButton
+          type='submit'
           children="Cadastrar-se"
           className="font-montserrat font-medium mt-2"
           disabled={email.length === 0}

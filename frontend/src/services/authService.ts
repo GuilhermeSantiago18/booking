@@ -10,7 +10,7 @@ interface RegisterPayload {
   lastName: string;
   email: string;
   password: string;
-  cep: string;
+  postalCode: string;
   state: string;
   city: string;
   district: string;
@@ -21,11 +21,11 @@ interface RegisterPayload {
 }
 
 export async function login(data: LoginPayload) {
-  const response = await api.post('/v1/users/login', data);
-  return response.data;
+  const response = await api.post('/users/login', data);
+  return response;
 }
 
 export async function register(data: RegisterPayload) {
-  const response = await api.post('/v1/users/register', data);
-  return response.data;
+  const response = await api.post('/users/register', data);
+  return response;
 }

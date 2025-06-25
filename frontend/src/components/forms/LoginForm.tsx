@@ -17,9 +17,9 @@ export default function LoginForm() {
     e.preventDefault();
     setError('');
     try {
-      const data = await login({ email, password });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      const loginResponse = await login({ email, password });
+      localStorage.setItem('token', loginResponse.data.token);
+      localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Email ou senha inválidos');
