@@ -8,7 +8,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { menuItems, IMenuItem } from './MenuItems';
 
 
-export default function Sidebar() {
+export default function Sidebar({ firstName, lastName, role }: IUser) {
   const pathname = usePathname();
   const [user, setUser] = useState<IUser | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -62,17 +62,17 @@ export default function Sidebar() {
               aria-haspopup="true"
               type="button"
             >
-              <span>{user.firstName} {user.lastName}</span>
+              <span>{firstName} {lastName}</span>
               {isUserDropdownOpen ? (
-                <ChevronUp size={18} />
-              ) : (
                 <ChevronDown size={18} />
+              ) : (
+                <ChevronUp size={18} />
               )}
             </button>
 
             {isUserDropdownOpen && (
               <div className="mt-2 text-xs capitalize">
-                {user.role}
+                {role}
               </div>
             )}
           </div>
