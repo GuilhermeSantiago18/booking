@@ -8,6 +8,7 @@ import { checkCep } from '@/services/checkCep';
 import { register } from '@/services/authService';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import Loading from '../Loading';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function RegisterForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [postalCode, setPostalCode] = useState('');
+  const [load, setLoad] = useState(false)
   const [address, setAddress] = useState({
     street: '',
     city: '',
@@ -41,11 +43,11 @@ export default function RegisterForm() {
 
     if (raw.length === 8) {
       try {
+        setLoad(true)
         const {data} = await checkCep(raw);
+        console.log("data", data)
 
         if (data) {
-   
-
         setAddress({
           street: data.street || data.logradouro || '',
           city: data.city || data.localidade || '',
@@ -58,6 +60,8 @@ export default function RegisterForm() {
           const errorMessage = error.response.data?.error || 'Erro inesperado';
       toast.error(errorMessage);
         }
+      } finally {
+        setLoad(false)
       }
     } else {
       setAddress({ street: '', city: '', state: '', district: '' });
@@ -93,9 +97,7 @@ export default function RegisterForm() {
   };
 
   try {
-    console.log("data register", JSON.stringify(dataRegister))
     const response = await register(dataRegister);
-    console.log("RESPONSE ", response)
     if (response && response.status === 201) {
       toast.success(response.data.message);
       router.push('/login');
@@ -158,7 +160,7 @@ export default function RegisterForm() {
           placeholder="Insira seu CEP"
         />
 
-        {address.street && (
+        {address.city && (
           <>
             <CustomInput
               label="Endereço"
@@ -211,6 +213,7 @@ export default function RegisterForm() {
           disabled={email.length === 0}
         />
       </form>
+      {load && <Loading />}
     </div>
   );
 }

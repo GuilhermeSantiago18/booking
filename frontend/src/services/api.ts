@@ -28,13 +28,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error?.response?.status;
+    const requestUrl = error?.config?.url;
 
-    if (!error.response) {
-      return Promise.reject(new Error('Erro de rede ou servidor offline.'));
-    }
-
-    if (status === 401 || status === 403) {
-      redirectToLogin();
+    if ((status === 401 || status === 403) && requestUrl !== '/users/login') {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+       redirectToLogin()
+      }
     }
 
     return Promise.reject(error);
