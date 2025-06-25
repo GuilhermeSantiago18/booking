@@ -22,7 +22,7 @@ export default function LoginForm() {
       localStorage.setItem('token', loginResponse.data.token);
       localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
       toast.success(loginResponse.data.message);
-      router.push('/dashboard');
+      router.push('/dashboard/agendamentos');
     } catch (error) {
     if (error instanceof AxiosError && error.response) {
     const errorMessage = error.response.data?.error || 'Erro inesperado';

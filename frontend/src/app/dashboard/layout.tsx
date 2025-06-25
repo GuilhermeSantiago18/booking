@@ -17,14 +17,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!user) return null;
 
  return (
-  <div className="flex min-h-screen">
+  <div className="flex">
 
     <Sidebar
       firstName={user.firstName}
       lastName={user.lastName}
       role={user.role}
     />
-    <section className="flex-1 p-6 min-h-screen">{children}</section>
+    <section className="flex-1 mt-6">{children}</section>
   </div>
 );
 
