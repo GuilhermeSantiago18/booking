@@ -13,7 +13,7 @@ async function login(req, res, next) {
   try {
     const { email, password } = req.body;
     const { user, token } = await UserService.login({ email, password });
-    res.json({ user, token });
+    res.status(200).json({ user, token, message: 'Success' });
   } catch (error) {
     next(error);
   }

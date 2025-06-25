@@ -72,10 +72,10 @@ async function createAdmin(data) {
 
 async function login({ email, password }) {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new CustomError('User not found', 404);
+  if (!user) throw new CustomError('Invalid User or Password', 401);
 
   const passwordValid = await bcryptjs.compare(password, user.password);
-  if (!passwordValid) throw new CustomError('Invalid password', 401);
+  if (!passwordValid) throw new CustomError('Invalid User or Password', 401);
 
   const token = generateToken({
     id: user.id,

@@ -8,9 +8,11 @@ interface LoadingProps {
   className?: string;
 }
 
-export default function Loading({ size = 24, className = '' }: LoadingProps) {
+export default function Loading({ size = 28, className = '' }: LoadingProps) {
   return (
-    <div className={`flex items-center justify-center ${className}`}>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-xs ${className}`}
+    >
       <Loader2 className="animate-spin text-black" size={size} />
     </div>
   );
