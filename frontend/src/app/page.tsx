@@ -1,5 +1,6 @@
 'use client';
 
+import Loading from '@/components/Loading';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -17,7 +18,7 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <p>Carregando...</p>
+      <Loading size={24}/>
     </div>
   );
 }
