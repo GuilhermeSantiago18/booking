@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const RoomController = require('../controllers/RoomController');
-const adminOnly = require('../middlewares/AdminOnly');
+const RoomController = require('../../controllers/RoomController');
+const adminOnly = require('../../middlewares/AdminOnly');
 
 router.get('/', RoomController.listRooms);
 router.post('/', adminOnly, RoomController.createRoom);

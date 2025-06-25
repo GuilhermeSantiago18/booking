@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const UserRoutes = require('./routes/user.routes');
-const RoomRoutes = require('./routes/room.routes');
+const UserRoutes = require('./routes/V1/user.routes');
+const RoomRoutes = require('./routes/V1/room.routes');
+const CepRoutes = require('./routes/V1/cep.routes')
 const errorHandler = require('./middlewares/ErrorHandler');
 const authMiddleware = require('./middlewares/AuthMiddleware');
 
@@ -14,8 +15,10 @@ app.get('/', (req, res) => {
   res.send('Success');
 });
 
-app.use('/users', UserRoutes);
-app.use('/rooms', authMiddleware, RoomRoutes);
+app.use('/v1/users', UserRoutes);
+app.use('/v1/api/cep', CepRoutes);
+app.use('/v1/rooms', authMiddleware, RoomRoutes);
+
 
 app.use(errorHandler);
 
