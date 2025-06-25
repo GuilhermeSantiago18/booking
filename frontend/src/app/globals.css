@@ -19,3 +19,7 @@
     --foreground: #ededed;
   }
 }
+
+body {
+  background-color: #f6f4f1;
+}

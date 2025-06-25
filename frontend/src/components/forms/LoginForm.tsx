@@ -33,7 +33,7 @@ export default function LoginForm() {
 
   return (
   <div className="w-full max-w-sm sm:max-w-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Entre na sua conta</h2>
+        <h2 className="text-3xl font-semibold mb-8 text-center font-montserrat max-w-md">Entre na sua conta</h2>
     <form
       onSubmit={handleSubmit}
         className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md"

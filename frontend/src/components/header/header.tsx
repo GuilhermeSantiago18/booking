@@ -15,7 +15,7 @@ export default function Header() {
   const targetRoute = isLogin ? '/register' : '/login';
 
   return (
-    <header className="flex justify-between items-center w-full px-24 py-4 shadow-sm bg-[#F6F4F1] border-b border-gray-300 w-full">
+    <header className="flex justify-between items-center w-full px-12 md:px-24  py-4 shadow-sm bg-[#F6F4F1] border-b border-gray-300 w-full">
       <div className="flex items-center">
         <Image
           src="/assets/logo.svg"
