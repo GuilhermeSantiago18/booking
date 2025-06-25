@@ -32,7 +32,7 @@ export default function LoginForm() {
 }
 
   return (
-  <div className="w-full max-w-sm sm:max-w-md md:max-w-lg">
+  <div className="w-full max-w-sm sm:max-w-md">
         <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Entre na sua conta</h2>
     <form
       onSubmit={handleSubmit}
@@ -44,7 +44,7 @@ export default function LoginForm() {
         {email.length > 0 && 
         <CustomInput label='Senha de acesso'  titleRight='(Obrigatorio)'  
         onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Insira sua senha'/>}
-        <MainButton children='Acessar Conta' className='font-montserrat font-medium'  disabled={email.length === 0}/>
+        <MainButton children='Acessar Conta' className='font-montserrat font-medium text-sm'  disabled={email.length === 0}/>
         <div className="flex justify-between align-between w-full">
         <p className="mt-4 text-center text-xs text-gray-900 font-montserrat">
        Ainda não tem um cadastro?
