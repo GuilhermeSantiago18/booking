@@ -1,12 +1,11 @@
 'use client';
 
-import CustomInput from '@/components/Inputs/CustomInput';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { useEffect, useState } from 'react';
+import { IUser } from '@/types/IUser';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<{ firstName: string; lastName: string; role: 'admin' | 'client' } | null>(null);
-   const [search, setSearch] = useState('');
+  const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -17,17 +16,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (!user) return null;
 
- return (
-  <div className="flex">
-
-    <Sidebar
-      firstName={user.firstName}
-      lastName={user.lastName}
-      role={user.role}
-    />
-    <section className="flex-1 mt-6">{children}
-    </section>
-  </div>
-);
-
+  return (
+    <div className="flex min-h-screen bg-white">
+      <Sidebar
+        firstName={user.firstName}
+        lastName={user.lastName}
+        role={user.role}
+      />
+      <main className="flex-1 p-4 md:ml-64">{children}</main>
+    </div>
+  );
 }
