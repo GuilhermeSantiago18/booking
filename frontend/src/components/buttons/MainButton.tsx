@@ -7,10 +7,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-export default function MainButton({ children, className = '', ...props }: ButtonProps) {
+export default function MainButton({ children, className = '', disabled, ...props }: ButtonProps) {
+  const baseClasses = 'w-full py-2 px-4 rounded transition';
+  const enabledClasses = 'bg-black text-white hover:bg-gray-900';
+  const disabledClasses = 'bg-[#D7D7D7] text-white cursor-not-allowed';
+
   return (
     <button
-      className={`w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-900 transition ${className}`}
+      className={`${baseClasses} ${disabled ? disabledClasses : enabledClasses} ${className}`}
+      disabled={disabled}
       {...props}
     >
       {children}

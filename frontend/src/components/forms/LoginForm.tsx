@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/services/authService';
 import MainButton from '../buttons/MainButton';
+import CustomInput from '../Inputs/CustomInput';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -26,49 +27,31 @@ export default function LoginForm() {
   };
 
   return (
+ <div className="w-full max-w-sm sm:max-w-md md:max-w-lg">
+        <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Entre na sua conta</h2>
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-8 rounded shadow-md w-full max-w-sm"
+        className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md"
     >
-      <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
+      {error && <p className="text-red-600 mb-4 font-montserrat">{error}</p>}
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-
-      <label htmlFor="email" className="block mb-1 font-medium">
-        Email
-      </label>
-      <input
-        id="email"
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-
-      <label htmlFor="password" className="block mb-1 font-medium">
-        Senha
-      </label>
-      <input
-        id="password"
-        type="password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full border border-gray-300 rounded px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-
-        <MainButton children='Acessar Conta'/>
-
-      <p className="mt-4 text-center text-sm text-gray-600">
-        Não tem conta?{' '}
+        <CustomInput label='E-mail' titleRight='(Obrigatorio)' onChange={(e) => setEmail(e.target.value)} placeholder='Insira seu email'/>
+        {email.length > 0 && 
+        <CustomInput label='Senha de acesso'  titleRight='(Obrigatorio)'  onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Insira sua senha'/>}
+        <MainButton children='Acessar Conta' className='font-montserrat font-medium'  disabled={email.length === 0}/>
+        <div className="flex justify-between align-between w-full">
+        <p className="mt-4 text-center text-xs text-gray-900 font-montserrat">
+       Ainda não tem um cadastro?
+        </p>
         <a
           href="/auth/register"
-          className="text-blue-600 hover:underline"
+          className="underline mt-4 font-montserrat font-semibold text-xs mr-8"
         >
-          Cadastre-se
+         Cadastre-se
         </a>
-      </p>
+
+      </div>
     </form>
+    </div>
   );
 }
