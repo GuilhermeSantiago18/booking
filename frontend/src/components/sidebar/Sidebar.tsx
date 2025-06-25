@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { IUser } from '../../types/IUser';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { menuItems, IMenuItem } from './MenuItems';
+import { Menu } from 'lucide-react';
 
 
 export default function Sidebar({ firstName, lastName, role }: IUser) {
@@ -28,18 +29,18 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
       <div className="md:hidden p-2 mt-2">
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="text-black border px-3 py-1 rounded"
+          className="text-black border px-3 py-1 rounded ml-4"
         >
-          Menu
+          <Menu />
         </button>
       </div>
 
       <aside
-        className={`bg-gray-100 h-screen md:w-64 fixed top-0 left-0 transform ${
+        className={`bg-gray-100 md:w-64 fixed transform ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 transition-transform duration-200 ease-in-out z-40`}
       >
-        <div className="flex flex-col h-full p-4 justify-between">
+        <div className="flex flex-col p-4 justify-between h-[calc(100vh-105px)]">
           <nav className="flex flex-col gap-4">
             {filteredMenuItems.map((link: IMenuItem) => (
               <Link
@@ -54,7 +55,7 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
               </Link>
             ))}
           </nav>
-          <div className="text-sm text-gray-700 mt-8 border-t pt-4">
+          <div className="text-sm text-gray-700 mt-8 border-t-2 border-gray-300 pt-4">
             <button
               onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
               className="w-full flex justify-between items-center font-semibold focus:outline-none"

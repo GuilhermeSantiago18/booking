@@ -22,7 +22,7 @@ export default function LoginForm() {
       localStorage.setItem('token', loginResponse.data.token);
       localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
       toast.success(loginResponse.data.message);
-      router.push('/dashboard');
+      router.push('/dashboard/agendamentos');
     } catch (error) {
     if (error instanceof AxiosError && error.response) {
     const errorMessage = error.response.data?.error || 'Erro inesperado';
@@ -32,8 +32,8 @@ export default function LoginForm() {
 }
 
   return (
-  <div className="w-full max-w-sm sm:max-w-md md:max-w-lg">
-        <h2 className="text-2xl font-semibold mb-6 text-center font-montserrat max-w-md">Entre na sua conta</h2>
+  <div className="w-full max-w-sm sm:max-w-md p-4 md:p-2">
+        <h2 className="text-2xl font-semibold mb-8 text-center font-montserrat max-w-md">Entre na sua conta</h2>
     <form
       onSubmit={handleSubmit}
         className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md"
@@ -44,7 +44,7 @@ export default function LoginForm() {
         {email.length > 0 && 
         <CustomInput label='Senha de acesso'  titleRight='(Obrigatorio)'  
         onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Insira sua senha'/>}
-        <MainButton children='Acessar Conta' className='font-montserrat font-medium'  disabled={email.length === 0}/>
+        <MainButton children='Acessar Conta' className='font-montserrat font-medium text-sm'  disabled={email.length === 0}/>
         <div className="flex justify-between align-between w-full">
         <p className="mt-4 text-center text-xs text-gray-900 font-montserrat">
        Ainda não tem um cadastro?
