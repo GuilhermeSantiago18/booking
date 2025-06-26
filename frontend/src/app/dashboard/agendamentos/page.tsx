@@ -7,12 +7,11 @@ import { useUser } from "@/hooks/useUser";
 import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
-import { createAppointment } from "@/services/appointments";
 import { ICreateAppointmentData } from "@/types/Appointment";
 import { X } from "lucide-react";
 
 export default function Agendamentos() {
-  const { appointments, isLoading, error } = useAppointments();
+  const { appointments, isLoading, error, cancelAppointment, createAppointment } = useAppointments();
   const { data: user } = useUser();
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
@@ -23,7 +22,7 @@ export default function Agendamentos() {
   };
 
   const handleConfirmModal = async (data: ICreateAppointmentData) => {
-    await createAppointment(data)
+    await createAppointment.mutateAsync(data)
     setIsModalOpen(false);
   };
 
@@ -65,10 +64,10 @@ export default function Agendamentos() {
         data={mappedData}
         renderActions={(row) =>
           row.status === 'PENDENTE' && (
-            <button className="cursor-pointer ml-4 md:ml-8">
+            <button className="cursor-pointer ml-4 md:ml-8" onClick={() => cancelAppointment.mutate(row.id)}>
               <X />
             </button>
-          )
+          ) 
         }
       />
 
