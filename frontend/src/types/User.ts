@@ -1,7 +1,7 @@
 export interface IUser {
   firstName: string;
   lastName: string;
-  role: string;
+  role: 'admin' | 'client';
 }
 
 export interface IUserFormData {
