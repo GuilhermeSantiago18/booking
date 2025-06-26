@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import Header from "@/components/header/header";
+import QueryProvider from '@/providers/QueryProvider'; 
 
 
 
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} antialiased`}
       >
+        <QueryProvider>
         <Header />
         {children}
         <Toaster 
@@ -47,6 +49,7 @@ export default function RootLayout({
             icon: '❌',
           },
         }} />
+        </QueryProvider>
       </body>
     </html>
   );
