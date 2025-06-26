@@ -20,9 +20,6 @@ export default function Profile() {
     toast.success('Perfil atualizado com sucesso!');
     queryClient.setQueryData(['user'], response.data.user);
   },
-  onError: () => {
-    toast.error('Erro ao atualizar perfil.');
-  },
 });
 
 

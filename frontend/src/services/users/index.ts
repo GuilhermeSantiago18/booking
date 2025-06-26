@@ -7,7 +7,7 @@ export async function fetchUser(): Promise<IUserFormData> {
 }
 
 
-export async function updateUser(): Promise<IUserFormData> {
-  const response = await api.put('/users/me'); 
+export async function updateUser(data: IUserFormData): Promise<IUserFormData> {
+  const response = await api.put('/users/me', data); 
   return response.data;
 }
