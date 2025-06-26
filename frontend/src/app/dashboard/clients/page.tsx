@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function Client() {
       const [search, setSearch] = useState('');
-  const [date, setDate] = useState('');
+    const [date, setDate] = useState('');
     return (
      <FilterBar
         search={search}

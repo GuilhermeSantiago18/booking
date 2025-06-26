@@ -34,7 +34,7 @@ export default function Profile() {
   if (isError || !user) return <p>Erro ao carregar perfil.</p>;
 
   return (
-    <div className='w-full justify-center'>
+    <div className='w-full  md:flex md:justify-center'>
     <UserForm
       mode="edit"
       initialData={user}
