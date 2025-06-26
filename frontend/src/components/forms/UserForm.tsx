@@ -6,6 +6,7 @@ import MainButton from '../buttons/MainButton';
 import { checkCep } from '@/services/checkCep';
 import Loading from '../Loading';
 import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Address {
   street: string;
@@ -21,6 +22,7 @@ interface UserFormProps {
 }
 
 export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormProps) {
+  const queryClient = useQueryClient();
   const [firstName, setFirstName] = useState(initialData.firstName || '');
   const [lastName, setLastName] = useState(initialData.lastName || '');
   const [email, setEmail] = useState(initialData.email || '');
@@ -83,6 +85,8 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
       complement,
       role: initialData.role || 'client',
     };
+
+     queryClient.setQueryData(['user'], payload);
 
     await onSubmit(payload);
   };

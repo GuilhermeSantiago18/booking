@@ -8,9 +8,11 @@ import CustomInput from '../Inputs/CustomInput';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function LoginForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +25,7 @@ export default function LoginForm() {
     try {
       const loginResponse = await login({ email, password });
       localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
+      queryClient.setQueryData(['user'], loginResponse.data.user);
       Cookies.set('token', loginResponse.data.token, { path: '/', expires: 1 });
       toast.success(loginResponse.data.message);
       router.push('/dashboard/agendamentos');
