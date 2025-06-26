@@ -1,24 +1,21 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/services/api';
-import { IAppointment, ICreateAppointmentData } from '@/types/Appointment';
+import { getAllAppointments, createAppointment, cancelAppointment } from '@/services/appointments';
+import { IAppointment } from '@/types/Appointment';
 import toast from 'react-hot-toast';
+
 
 export function useAppointments() {
   const queryClient = useQueryClient();
 
+
   const { data, isLoading, error } = useQuery<IAppointment[]>({
     queryKey: ['appointments'],
-    queryFn: async () => {
-      const response = await api.get('/appointments');
-      return response.data;
-    },
+    queryFn: getAllAppointments,
     staleTime: 1000 * 60 * 10,
   });
 
-  const createAppointment = useMutation({
-    mutationFn: async (newData: ICreateAppointmentData) => {
-      return api.post('/appointments', newData);
-    },
+  const createMutation = useMutation({
+    mutationFn: createAppointment,
     onSuccess: () => {
       toast.success('Agendamento criado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
@@ -26,10 +23,8 @@ export function useAppointments() {
     onError: () => toast.error('Erro ao criar agendamento'),
   });
 
-  const cancelAppointment = useMutation({
-    mutationFn: async (id: number) => {
-      return api.delete(`/appointments/${id}`);
-    },
+  const cancelMutation = useMutation({
+    mutationFn: cancelAppointment,
     onSuccess: () => {
       toast.success('Agendamento cancelado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
@@ -41,7 +36,7 @@ export function useAppointments() {
     appointments: data,
     isLoading,
     error,
-    createAppointment,
-    cancelAppointment,
+    createAppointment: createMutation,
+    cancelAppointment: cancelMutation,
   };
 }

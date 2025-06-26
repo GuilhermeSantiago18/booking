@@ -7,6 +7,7 @@ import { IUser } from '../../types/User';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { menuItems, IMenuItem } from './MenuItems';
 import { Menu } from 'lucide-react';
+import LogoutButton from '../buttons/LogoutButton';
 
 
 export default function Sidebar({ firstName, lastName, role }: IUser) {
@@ -55,7 +56,8 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
               </Link>
             ))}
           </nav>
-          <div className="text-sm text-gray-700 mt-8 border-t-2 border-gray-300 pt-4">
+          <LogoutButton />
+          <div className="text-sm text-gray-700 mt-8 border-t-2 border-gray-300 pt-4">            
             <button
               onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
               className="w-full flex justify-between items-center font-semibold focus:outline-none"
@@ -70,7 +72,6 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
                 <ChevronUp size={18} />
               )}
             </button>
-
             {isUserDropdownOpen && (
               <div className="mt-2 text-xs capitalize">
                 {role}

@@ -22,7 +22,7 @@ export default function FilterBar({
   return (
     <div className="flex flex-col md:flex-row items-start gap-4 mb-6">
       <CustomInput
-        placeholder="Nome, CPF ou Email"
+        placeholder="Filtre por nome"
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
       />
