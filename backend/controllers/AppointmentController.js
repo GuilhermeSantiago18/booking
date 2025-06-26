@@ -32,7 +32,7 @@ async function deleteAppointment(req, res, next) {
   try {
     const userId = req.user.id;
     const userRole = req.user.role;
-    const { id } = req.body;
+    const { id } = req.params;
 
     await AppointmentService.deleteAppointment(userId, id, userRole);
     return res.status(204).send();
