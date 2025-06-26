@@ -20,7 +20,6 @@ export function useAppointments() {
       toast.success('Agendamento criado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
     },
-    onError: () => toast.error('Erro ao criar agendamento'),
   });
 
   const cancelMutation = useMutation({
@@ -29,7 +28,6 @@ export function useAppointments() {
       toast.success('Agendamento cancelado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
     },
-    onError: () => toast.error('Erro ao cancelar agendamento'),
   });
 
   return {

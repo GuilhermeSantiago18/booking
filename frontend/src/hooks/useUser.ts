@@ -1,11 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@/services/api';
 import { IUserFormData } from '@/types/User';
+import { fetchUser } from '@/services/users';
 
-async function fetchUser(): Promise<IUserFormData> {
-  const response = await api.get('/users/me'); 
-  return response.data;
-}
 
 export function useUser() {
   return useQuery<IUserFormData>({

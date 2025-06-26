@@ -9,6 +9,7 @@ import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { ICreateAppointmentData } from "@/types/Appointment";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function Agendamentos() {
   const { appointments, isLoading, error, cancelAppointment, createAppointment } = useAppointments();
@@ -22,8 +23,12 @@ export default function Agendamentos() {
   };
 
   const handleConfirmModal = async (data: ICreateAppointmentData) => {
+    try {
     await createAppointment.mutateAsync(data)
     setIsModalOpen(false);
+    }
+    catch(error) {
+    }
   };
 
   if (!user) return null;
