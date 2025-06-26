@@ -86,8 +86,46 @@ async function login({ email, password }) {
   return { user, token };
 }
 
+
+async function update(userId, data) {
+  const user = await User.findByPk(userId);
+  if (!user) throw new CustomError('User not found', 404);
+
+  const {
+    firstName,
+    lastName,
+    password,
+    postalCode,
+    street,
+    number,
+    complement,
+    district,
+    city,
+    state,
+  } = data;
+
+  if (password) {
+    user.password = await bcryptjs.hash(password, 10);
+  }
+
+  user.firstName = firstName ?? user.firstName;
+  user.lastName = lastName ?? user.lastName;
+  user.cep = postalCode ?? user.cep;
+  user.street = street ?? user.street;
+  user.number = number ?? user.number;
+  user.complement = complement ?? user.complement;
+  user.district = district ?? user.district;
+  user.city = city ?? user.city;
+  user.state = state ?? user.state;
+
+  await user.save();
+  return user;
+}
+
+
 module.exports = {
   registerClient,
   createAdmin,
   login,
+  update
 };
