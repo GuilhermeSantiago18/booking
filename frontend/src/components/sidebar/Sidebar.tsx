@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IUser } from '../../types/IUser';
+import { IUser } from '../../types/User';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { menuItems, IMenuItem } from './MenuItems';
 import { Menu } from 'lucide-react';

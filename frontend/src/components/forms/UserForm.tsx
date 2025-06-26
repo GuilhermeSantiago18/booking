@@ -1,0 +1,125 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import CustomInput from '../Inputs/CustomInput';
+import MainButton from '../buttons/MainButton';
+import { checkCep } from '@/services/checkCep';
+import Loading from '../Loading';
+import toast from 'react-hot-toast';
+
+interface Address {
+  street: string;
+  city: string;
+  state: string;
+  district: string;
+}
+
+interface UserFormProps {
+  mode: 'register' | 'edit';
+  initialData?: any;
+  onSubmit: (data: any) => Promise<void>;
+}
+
+export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormProps) {
+  const [firstName, setFirstName] = useState(initialData.firstName || '');
+  const [lastName, setLastName] = useState(initialData.lastName || '');
+  const [email, setEmail] = useState(initialData.email || '');
+  const [password, setPassword] = useState('');
+  const [postalCode, setPostalCode] = useState(initialData.postalCode || '');
+  const [address, setAddress] = useState<Address>({
+    street: initialData.street || '',
+    city: initialData.city || '',
+    state: initialData.state || '',
+    district: initialData.district || '',
+  });
+  const [number, setNumber] = useState(initialData.number || '');
+  const [complement, setComplement] = useState(initialData.complement || '');
+  const [load, setLoad] = useState(false);
+
+  const inputBgClass = address.city ? 'bg-[#F0F0F0]' : 'bg-transparent';
+
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '');
+    if (raw.length > 8) raw = raw.slice(0, 8);
+    const formatted = raw.length > 5 ? raw.replace(/^(\d{5})(\d{0,3})/, '$1-$2') : raw;
+
+    setPostalCode(formatted);
+
+    if (raw.length === 8) {
+      try {
+        setLoad(true);
+        const { data } = await checkCep(raw);
+        if (data) {
+          setAddress({
+            street: data.street || data.logradouro || '',
+            city: data.city || data.localidade || '',
+            state: data.state || data.uf || '',
+            district: data.district || data.bairro || '',
+          });
+        }
+      } catch (error: any) {
+        toast.error('Erro ao buscar CEP.');
+      } finally {
+        setLoad(false);
+      }
+    } else {
+      setAddress({ street: '', city: '', state: '', district: '' });
+      setNumber('');
+      setComplement('');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const payload = {
+      firstName,
+      lastName,
+      email,
+      password: mode === 'register' ? password : undefined,
+      postalCode,
+      ...address,
+      number,
+      complement,
+      role: initialData.role || 'client',
+    };
+
+    await onSubmit(payload);
+  };
+
+  return (
+    <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md" onSubmit={handleSubmit}>
+      <div className="flex gap-x-4">
+        <CustomInput label="Nome" titleRight="(Obrigatório)" onChange={(e) => setFirstName(e.target.value)} placeholder="Ex: Jose" value={firstName} />
+        <CustomInput label="Sobrenome" titleRight="(Obrigatório)" onChange={(e) => setLastName(e.target.value)} placeholder="Ex: Lima" value={lastName} />
+      </div>
+
+      <CustomInput label="E-mail" titleRight="(Obrigatório)" onChange={(e) => setEmail(e.target.value)} placeholder="Insira seu email" value={email} readOnly={mode === 'edit'} />
+
+      {mode === 'register' && (
+        <CustomInput label="Senha de acesso" titleRight="(Obrigatório)" onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Insira sua senha" value={password} />
+      )}
+
+      <hr className="border-t border-gray-300 mb-4" />
+
+      <CustomInput label="CEP" titleRight="(Obrigatório)" value={postalCode} onChange={handleCepChange} maxLength={9} placeholder="Insira seu CEP" />
+
+      {address.city && (
+        <>
+          <CustomInput label="Endereço" value={address.street} onChange={(e) => setAddress((prev) => ({ ...prev, street: e.target.value }))} placeholder="Rua, avenida, etc." inputClassName={inputBgClass} />
+          <CustomInput label="Número" value={number} onChange={(e) => setNumber(e.target.value)} placeholder="Número" />
+          <CustomInput label="Complemento" value={complement} onChange={(e) => setComplement(e.target.value)} placeholder="Apartamento, bloco, etc." />
+          <CustomInput label="Bairro" value={address.district} onChange={(e) => setAddress((prev) => ({ ...prev, district: e.target.value }))} placeholder="Bairro" inputClassName={inputBgClass} />
+          <CustomInput label="Cidade" value={address.city} onChange={(e) => setAddress((prev) => ({ ...prev, city: e.target.value }))} placeholder="Cidade" inputClassName={inputBgClass} />
+          <CustomInput label="Estado" value={address.state} onChange={(e) => setAddress((prev) => ({ ...prev, state: e.target.value }))} placeholder="Estado" inputClassName={inputBgClass} />
+        </>
+      )}
+
+      <MainButton type="submit" className="font-montserrat font-medium mt-2">
+        {mode === 'register' ? 'Cadastrar-se' : 'Atualizar Dados'}
+      </MainButton>
+
+      {load && <Loading />}
+    </form>
+  );
+}
