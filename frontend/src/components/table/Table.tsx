@@ -14,7 +14,7 @@ interface TableProps {
 
 export default function Table({ headers, data, renderActions, emptyMessage = 'Nenhum dado encontrado.' }: TableProps) {
   return (
-    <div className="overflow-x-auto bg-white rounded shadow-md">
+    <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat">
       <table className="min-w-full table-auto border">
         <thead className="bg-gray-100">
           <tr>

@@ -1,6 +1,7 @@
 const CustomError = require('../errors/CustomError');
 const Appointment = require('../models/Appointment');
 const Room = require('../models/Room');
+const User = require('../models/User');
 
 async function createAppointment(userId, { date, time, room }) {
   if (!date || !time || !room) {
@@ -34,8 +35,20 @@ async function createAppointment(userId, { date, time, room }) {
 
 
 async function getAll() {
-  return await Appointment.findAll();
+  return await Appointment.findAll({
+    include: [
+      {
+        model: User,
+        attributes: ['firstName', 'lastName'],
+      },
+      {
+        model: Room,
+        attributes: ['name'],
+      }
+    ],
+  });
 }
+
 
 module.exports = {
   createAppointment,

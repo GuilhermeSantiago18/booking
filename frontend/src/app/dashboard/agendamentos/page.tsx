@@ -6,6 +6,9 @@ import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
+import Loading from "@/components/Loading";
+import { createAppointment } from "@/services/appointments";
+import { ICreateAppointmentData } from "@/types/Appointment";
 
 export default function Agendamentos() {
   const { appointments, isLoading, error } = useAppointments();
@@ -18,21 +21,23 @@ export default function Agendamentos() {
     setIsModalOpen(true);
   };
 
-  const handleConfirmModal = (data: any) => {
-    console.log('Dados do agendamento recebidos:', data);
+  const handleConfirmModal = async (data: ICreateAppointmentData) => {
+    await createAppointment(data)
     setIsModalOpen(false);
   };
 
   if (!user) return null;
-  console.log("appointments", appointments)
 
-  const mappedData = (appointments ?? []).map(appointment => ({
-    dateAppointment: appointment.date,
-    nome: `${'Gui'} ${'test'}`,
-    roomName: appointment.room_id,
-    statusAppointment: appointment.status,
-    ...appointment,
-  }));
+ const mappedData = (appointments ?? []).map(appointment => ({
+  date: `${appointment.date} às ${appointment.time.slice(0,5)}`,
+  nome: `${appointment.User.firstName} ${appointment.User.lastName}`,
+  roomName: appointment.Room.name,
+  status: appointment.status,
+  id: appointment.id,      
+  time: appointment.time,   
+  room_id: appointment.room_id,
+}));
+
 
 
   return (
@@ -46,7 +51,7 @@ export default function Agendamentos() {
         onActionClick={handleActionClick}
       />
 
-      {isLoading && <p>Carregando agendamentos...</p>}
+      {isLoading && <Loading />}
       {error && <p>Erro ao carregar agendamentos.</p>}
 
       <Table

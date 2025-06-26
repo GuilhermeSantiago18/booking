@@ -1,19 +1,23 @@
 export interface IAppointment {
+  room_id: number;
   id: number;
   date: string;
-  time: string; 
+  time: string;
   status: 'PENDENTE' | 'CONFIRMADO' | 'RECUSADO';
-  user: {
-    id: number;
+  User: {
     firstName: string;
     lastName: string;
-    email: string;
   };
-  room: {
-    id: number;
+  Room: {
     name: string;
     description?: string;
   };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ICreateAppointmentData {
+  date: string;
+  time: string;
+  room: string;
 }

@@ -1,3 +1,4 @@
+import { ICreateAppointmentData } from '@/types/Appointment';
 import { api } from '../api';
 
 export async function getAllAppointments() {
@@ -5,11 +6,7 @@ export async function getAllAppointments() {
   return response.data;
 }
 
-export async function createAppointment(data: {
-  date: string;
-  time: string;
-  room: string;
-}) {
+export async function createAppointment(data: ICreateAppointmentData) {
   const response = await api.post('/appointments', data);
   return response.data;
 }

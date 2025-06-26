@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
-import { IAppointment } from '@/types/Appointment';
+import { IAppointment, ICreateAppointmentData } from '@/types/Appointment';
 import toast from 'react-hot-toast';
 
 export function useAppointments() {
@@ -16,11 +16,7 @@ export function useAppointments() {
   });
 
   const createAppointment = useMutation({
-    mutationFn: async (newData: {
-      date: string;
-      time: string;
-      room: string;
-    }) => {
+    mutationFn: async (newData: ICreateAppointmentData) => {
       return api.post('/appointments', newData);
     },
     onSuccess: () => {
