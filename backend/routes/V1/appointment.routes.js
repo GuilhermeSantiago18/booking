@@ -6,5 +6,6 @@ const adminOnly = require('../../middlewares/AdminOnly');
 
 router.get('/', AppointmentController.getAll);
 router.post('/', AppointmentController.createAppointment);
+router.delete('/', AppointmentController.createAppointment);
 
 module.exports = router;

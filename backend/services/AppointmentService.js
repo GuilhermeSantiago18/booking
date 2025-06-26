@@ -60,11 +60,25 @@ async function getAllByUser(userId) {
   });
 }
 
+async function deleteAppointment(userId, appointmentId, userRole) {
+  const appointment = await Appointment.findByPk(appointmentId);
+  if (!appointment) {
+    throw new CustomError('Agendamento não encontrado', 404);
+  }
+
+  if (userRole === 'client' && appointment.user_id !== userId) {
+    throw new CustomError('Não autorizado a cancelar este agendamento', 403);
+  }
+
+  await Appointment.destroy({ where: { id: appointmentId } });
+}
+
 
 
 
 module.exports = {
   createAppointment,
   getAll,
-  getAllByUser
+  getAllByUser,
+  deleteAppointment
 };
