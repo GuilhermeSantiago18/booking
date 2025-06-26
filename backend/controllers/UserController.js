@@ -29,7 +29,7 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function getUser(req, res, next) {
+async function getUserByID(req, res, next) {
   try {
     const userId = req.user.id;
     const user = await UserService.getUserByID(userId);
@@ -44,5 +44,5 @@ module.exports = {
   register,
   login,
   updateUser,
-  getUser
+  getUserByID
 };
