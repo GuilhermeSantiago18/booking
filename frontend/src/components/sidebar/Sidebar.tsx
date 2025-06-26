@@ -36,11 +36,11 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
       </div>
 
       <aside
-        className={`bg-gray-100 md:w-64 fixed transform top-0 min-h-screen ${
+        className={`bg-gray-100 md:w-64 fixed transform top-0 md:top-auto min-h-screen ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 transition-transform duration-200 ease-in-out z-40`}
       >
-        <div className="flex flex-col p-4 justify-between h-[calc(100vh)]">
+        <div className="flex flex-col p-4 justify-between  h-[100vh] md:h-[calc(100vh-120px)]">
           <nav className="flex flex-col gap-4">
             {filteredMenuItems.map((link: IMenuItem) => (
               <Link

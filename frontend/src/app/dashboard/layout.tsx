@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       <Sidebar
         firstName={user.firstName}
         lastName={user.lastName}
