@@ -33,3 +33,10 @@ export async function getAllRooms() {
   const response = await api.get("/rooms",);
   return response;
 }
+
+
+export async function getAllAppointments() {
+  const response = await api.get("/appointments",);
+  return response;
+}
+

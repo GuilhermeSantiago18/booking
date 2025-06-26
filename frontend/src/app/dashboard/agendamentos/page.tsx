@@ -5,8 +5,10 @@ import Table from "@/components/table/Table";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import ModalAgendamento from "@/components/modals/ModalAgendamento";
+import { useAppointments } from "@/hooks/useAppointments";
 
 export default function Agendamentos() {
+  const { appointments, isLoading, error } = useAppointments();
   const { data: user } = useUser();
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
@@ -22,6 +24,16 @@ export default function Agendamentos() {
   };
 
   if (!user) return null;
+  console.log("appointments", appointments)
+
+  const mappedData = (appointments ?? []).map(appointment => ({
+    dateAppointment: appointment.date,
+    nome: `${'Gui'} ${'test'}`,
+    roomName: appointment.room_id,
+    statusAppointment: appointment.status,
+    ...appointment,
+  }));
+
 
   return (
     <>
@@ -34,6 +46,9 @@ export default function Agendamentos() {
         onActionClick={handleActionClick}
       />
 
+      {isLoading && <p>Carregando agendamentos...</p>}
+      {error && <p>Erro ao carregar agendamentos.</p>}
+
       <Table
         headers={[
           { label: 'Data de agendamento', key: 'date' },
@@ -41,6 +56,7 @@ export default function Agendamentos() {
           { label: 'Sala de agendamento', key: 'roomName' },
           { label: 'Status transação', key: 'status' },
         ]}
+        data={mappedData}
         renderActions={(row) =>
           row.status === 'PENDENTE' && (
             <button className="text-red-600 hover:underline">
@@ -48,7 +64,6 @@ export default function Agendamentos() {
             </button>
           )
         }
-        data={[]}
       />
 
       <ModalAgendamento
