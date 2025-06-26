@@ -1,24 +1,19 @@
 'use client';
 
+import Loading from '@/components/Loading';
 import Sidebar from '@/components/sidebar/Sidebar';
-import { useEffect, useState } from 'react';
-import { IUser } from '@/types/User';
+import { useUser } from '@/hooks/useUser';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<IUser | null>(null);
+  const { data: user, isLoading } = useUser();
 
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  if (isLoading) return <Loading />
+  if (!user) return <p>Usuário não encontrado</p>;
 
-  if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       <Sidebar
         firstName={user.firstName}
         lastName={user.lastName}

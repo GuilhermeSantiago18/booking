@@ -21,6 +21,7 @@ interface UserFormProps {
   onSubmit: (data: any) => Promise<void>;
 }
 
+
 export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormProps) {
   const queryClient = useQueryClient();
   const [firstName, setFirstName] = useState(initialData.firstName || '');
@@ -91,6 +92,9 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
     await onSubmit(payload);
   };
 
+  const isEditMode = mode === 'edit';
+  const isFormValidForEdit = postalCode.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+
   return (
     <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md" onSubmit={handleSubmit}>
       <div className="flex gap-x-4">
@@ -116,7 +120,7 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
         </>
       )}
 
-      <MainButton type="submit" className="font-montserrat font-medium mt-2">
+      <MainButton type="submit" className="font-montserrat font-medium mt-2" disabled={isEditMode && !isFormValidForEdit}>
         {mode === 'register' ? 'Cadastrar-se' : 'Atualizar Dados'}
       </MainButton>
 

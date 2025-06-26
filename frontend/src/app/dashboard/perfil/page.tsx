@@ -18,7 +18,7 @@ export default function Profile() {
   },
   onSuccess: (response) => {
     toast.success('Perfil atualizado com sucesso!');
-    queryClient.setQueryData(['user'], response.data);
+    queryClient.setQueryData(['user'], response.data.user);
   },
   onError: () => {
     toast.error('Erro ao atualizar perfil.');
@@ -30,15 +30,16 @@ export default function Profile() {
   updateUserMutation.mutate(formData);
 };
 
-    console.log("isError", isError, 'USER', user)
   if (isLoading) return <Loading />
   if (isError || !user) return <p>Erro ao carregar perfil.</p>;
 
   return (
+    <div className='w-full justify-center'>
     <UserForm
       mode="edit"
       initialData={user}
       onSubmit={handleUpdateSubmit}
     />
+    </div>
   );
 }
