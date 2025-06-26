@@ -122,10 +122,17 @@ async function update(userId, data) {
   return user;
 }
 
+async function getUserByID(id) {
+  return await User.findByPk(id, {
+    attributes: { exclude: ['password'] }, 
+  });
+}
+
 
 module.exports = {
   registerClient,
   createAdmin,
   login,
-  update
+  update,
+  getUserByID
 };
