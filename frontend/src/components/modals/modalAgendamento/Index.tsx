@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+'use client';
+
 import { X } from 'lucide-react';
 import MainButton from '@/components/buttons/MainButton';
-import ClientForm from './modalAgendamento/ClientForm';
-import AdminForm from './modalAgendamento/AdminForm';
-import { IRoom } from '@/types/Room';
+import { useEffect, useState } from 'react';
 import { getAllRooms } from '@/services/api';
+import ClientForm from './ClientForm';
+import AdminForm from './AdminForm';
+import { IRoom } from '@/types/Room';
 
 interface ModalAgendamentoProps {
   isOpen: boolean;
@@ -13,17 +15,31 @@ interface ModalAgendamentoProps {
   role: 'client' | 'admin';
 }
 
-export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: ModalAgendamentoProps) {
-  const [formData, setFormData] = useState({});
+export default function ModalAgendamento({
+  isOpen,
+  onClose,
+  onConfirm,
+  role,
+}: ModalAgendamentoProps) {
   const [rooms, setRooms] = useState<IRoom[]>([]);
+  const [formData, setFormData] = useState<any>({});
 
   useEffect(() => {
-    if (isOpen) {
-      getAllRooms()
-        .then((res) => setRooms(res.data))
-        .catch((err) => console.error('Erro ao buscar salas', err));
-    }
+    const fetchRooms = async () => {
+      try {
+        const response = await getAllRooms();
+        setRooms(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar salas:', error);
+      }
+    };
+    if (isOpen) fetchRooms();
   }, [isOpen]);
+
+  const handleSubmit = () => {
+    onConfirm(formData);
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -44,10 +60,7 @@ export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: M
           <AdminForm onChange={setFormData} />
         )}
 
-        <MainButton className="mt-6 w-full" onClick={() => {
-          onConfirm(formData);
-          onClose();
-        }}>
+        <MainButton onClick={handleSubmit} className="mt-6 w-full">
           {role === 'client' ? 'Confirmar Agendamento' : 'Salvar'}
         </MainButton>
       </div>

@@ -1,14 +1,15 @@
 import axios from 'axios';
 
+export const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL_V1,
+  withCredentials: true, 
+});
+
 const redirectToLogin = () => {
   localStorage.removeItem('user');
   window.location.replace('/login');
 };
 
-export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL_V1,
-  withCredentials: true, 
-});
 
 api.interceptors.response.use(
   (response) => response,
@@ -25,3 +26,10 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
+
+export async function getAllRooms() {
+  const response = await api.get("/rooms",);
+  return response;
+}
