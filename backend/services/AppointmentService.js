@@ -49,8 +49,22 @@ async function getAll() {
   });
 }
 
+async function getAllByUser(userId) {
+   return await Appointment.findAll({
+    where: { user_id: userId },
+    include: [
+      { model: User, attributes: ['firstName', 'lastName'] },
+      { model: Room, attributes: ['name'] },
+    ],
+    order: [['createdAt', 'DESC']],
+  });
+}
+
+
+
 
 module.exports = {
   createAppointment,
-  getAll
+  getAll,
+  getAllByUser
 };

@@ -11,14 +11,23 @@ async function createAppointment(req, res, next) {
   }
 }
 
-async function getAll(req, res, next) {
+async function getAll(req, res) {
   try {
-    const allAppointments = await AppointmentService.getAll();
-    return res.status(201).json(allAppointments);
+    const userId = req.user.id;
+
+    if (req.user.role === 'admin') {
+      const all = await AppointmentService.getAll();
+      return res.json(all);
+    }
+
+    const ownAppointments = await AppointmentService.getAllByUser(userId);
+    return res.json(ownAppointments);
   } catch (error) {
-    next(error);
+    next(error)
   }
 }
+
+ 
 
 module.exports = {
   createAppointment,
