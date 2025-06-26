@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const router = useRouter()
 
 async function handleRegisterSubmit(data: IUserFormData) {
-  const response = await register(data);
+  await register(data);
   toast.success('Cadastro realizado com sucesso!');
   router.push('/login');
 }

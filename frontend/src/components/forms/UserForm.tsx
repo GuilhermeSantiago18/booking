@@ -7,6 +7,7 @@ import { checkCep } from '@/services/checkCep';
 import Loading from '../Loading';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 interface Address {
   street: string;
@@ -28,7 +29,7 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
   const [lastName, setLastName] = useState(initialData.lastName || '');
   const [email, setEmail] = useState(initialData.email || '');
   const [password, setPassword] = useState('');
-  const [postalCode, setPostalCode] = useState(initialData.postalCode || '');
+  const [postalCode, setPostalCode] = useState(initialData.cep || '');
   const [address, setAddress] = useState<Address>({
     street: initialData.street || '',
     city: initialData.city || '',
@@ -60,11 +61,14 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
             district: data.district || data.bairro || '',
           });
         }
-      } catch (error: any) {
-        toast.error('Erro ao buscar CEP.');
-      } finally {
-        setLoad(false);
-      }
+     } catch (error) {
+       if (error instanceof AxiosError && error.response) {
+        const errorMessage = error.response.data?.error || 'Erro inesperado';
+        toast.error(errorMessage);
+       }
+} finally {
+  setLoad(false);
+}
     } else {
       setAddress({ street: '', city: '', state: '', district: '' });
       setNumber('');
