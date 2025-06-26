@@ -5,9 +5,12 @@ const RoomRoutes = require('./routes/V1/room.routes');
 const CepRoutes = require('./routes/V1/cep.routes')
 const errorHandler = require('./middlewares/ErrorHandler');
 const authMiddleware = require('./middlewares/AuthMiddleware');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
+
+app.use(cookieParser());
 app.use(cors({
    origin: process.env.APP_URL || 'http://localhost:3000',
    credentials: true,
