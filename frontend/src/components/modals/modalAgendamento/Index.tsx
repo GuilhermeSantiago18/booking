@@ -1,12 +1,9 @@
-'use client';
-
-import { X } from 'lucide-react';
-import MainButton from '@/components/buttons/MainButton';
-import { useEffect, useState } from 'react';
-import { getAllRooms } from '@/services/api';
+import { useRooms } from '@/hooks/useRoom';
 import ClientForm from './ClientForm';
 import AdminForm from './AdminForm';
-import { IRoom } from '@/types/Room';
+import MainButton from '@/components/buttons/MainButton';
+import { X } from 'lucide-react';
+import { useState } from 'react';
 
 interface ModalAgendamentoProps {
   isOpen: boolean;
@@ -15,31 +12,9 @@ interface ModalAgendamentoProps {
   role: 'client' | 'admin';
 }
 
-export default function ModalAgendamento({
-  isOpen,
-  onClose,
-  onConfirm,
-  role,
-}: ModalAgendamentoProps) {
-  const [rooms, setRooms] = useState<IRoom[]>([]);
-  const [formData, setFormData] = useState<any>({});
-
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const response = await getAllRooms();
-        setRooms(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar salas:', error);
-      }
-    };
-    if (isOpen) fetchRooms();
-  }, [isOpen]);
-
-  const handleSubmit = () => {
-    onConfirm(formData);
-    onClose();
-  };
+export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: ModalAgendamentoProps) {
+  const { data: rooms, isLoading, error } = useRooms();
+  const [formData, setFormData] = useState({});
 
   if (!isOpen) return null;
 
@@ -54,13 +29,24 @@ export default function ModalAgendamento({
           {role === 'client' ? 'Novo Agendamento' : 'Ajustes de Agendamento'}
         </h2>
 
-        {role === 'client' ? (
-          <ClientForm rooms={rooms} onChange={setFormData} />
-        ) : (
-          <AdminForm onChange={setFormData} />
+        {isLoading && <p>Carregando salas...</p>}
+        {error && <p>Erro ao carregar salas.</p>}
+
+        {!isLoading && !error && (
+          role === 'client' ? (
+            <ClientForm rooms={rooms || []} onChange={setFormData} />
+          ) : (
+            <AdminForm onChange={setFormData} />
+          )
         )}
 
-        <MainButton onClick={handleSubmit} className="mt-6 w-full">
+        <MainButton
+          className="mt-6 w-full"
+          onClick={() => {
+            onConfirm(formData);
+            onClose();
+          }}
+        >
           {role === 'client' ? 'Confirmar Agendamento' : 'Salvar'}
         </MainButton>
       </div>
