@@ -78,7 +78,7 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
       firstName,
       lastName,
       email,
-      password: mode === 'register' ? password : undefined,
+      password,
       postalCode,
       ...address,
       number,
@@ -100,11 +100,8 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
 
       <CustomInput label="E-mail" titleRight="(Obrigatório)" onChange={(e) => setEmail(e.target.value)} placeholder="Insira seu email" value={email} readOnly={mode === 'edit'} />
 
-      {mode === 'register' && (
-        <CustomInput label="Senha de acesso" titleRight="(Obrigatório)" onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Insira sua senha" value={password} />
-      )}
+      <CustomInput label="Senha de acesso" titleRight="(Obrigatório)" onChange={(e) => setPassword(e.target.value)} type="password" placeholder={mode === 'edit' ? 'Nova senha': 'Insira sua senha'} value={password} />
 
-      <hr className="border-t border-gray-300 mb-4" />
 
       <CustomInput label="CEP" titleRight="(Obrigatório)" value={postalCode} onChange={handleCepChange} maxLength={9} placeholder="Insira seu CEP" />
 
