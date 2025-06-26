@@ -9,6 +9,7 @@ import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { createAppointment } from "@/services/appointments";
 import { ICreateAppointmentData } from "@/types/Appointment";
+import { X } from "lucide-react";
 
 export default function Agendamentos() {
   const { appointments, isLoading, error } = useAppointments();
@@ -64,8 +65,8 @@ export default function Agendamentos() {
         data={mappedData}
         renderActions={(row) =>
           row.status === 'PENDENTE' && (
-            <button className="text-red-600 hover:underline">
-              Cancelar
+            <button className="cursor-pointer ml-4 md:ml-8">
+              <X />
             </button>
           )
         }

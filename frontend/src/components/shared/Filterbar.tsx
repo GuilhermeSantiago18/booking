@@ -34,7 +34,7 @@ export default function FilterBar({
       />
 
       <MainButton
-        className="md:ml-auto w-full md:max-w-xs font-montserrat"
+        className="md:ml-auto w-full md:max-w-3xs font-montserrat"
         onClick={onActionClick}
       >
         {role === 'admin' ? 'Ajustes de agendamento' : 'Novo agendamento'}
