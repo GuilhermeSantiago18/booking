@@ -14,3 +14,8 @@ export async function createAppointment(data: ICreateAppointmentData): Promise<I
 export async function cancelAppointment(id: number): Promise<void> {
   await api.delete(`/appointments/${id}`);
 }
+
+export async function confirmAppointment(id: number): Promise<void> {
+  await api.patch(`/appointments/${id}`);
+}
+

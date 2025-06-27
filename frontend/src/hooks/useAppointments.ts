@@ -1,12 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllAppointments, createAppointment, cancelAppointment } from '@/services/appointments';
+import { getAllAppointments, createAppointment, cancelAppointment, confirmAppointment } from '@/services/appointments';
 import { IAppointment } from '@/types/Appointment';
 import toast from 'react-hot-toast';
 
-
 export function useAppointments() {
   const queryClient = useQueryClient();
-
 
   const { data, isLoading, error } = useQuery<IAppointment[]>({
     queryKey: ['appointments'],
@@ -30,11 +28,20 @@ export function useAppointments() {
     },
   });
 
+  const confirmMutation = useMutation({
+    mutationFn:confirmAppointment,
+    onSuccess: () => {
+      toast.success('Agendamento confirmado!');
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    },
+  });
+
   return {
     appointments: data,
     isLoading,
     error,
     createAppointment: createMutation,
     cancelAppointment: cancelMutation,
+    confirmAppointment: confirmMutation,
   };
 }
