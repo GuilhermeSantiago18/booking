@@ -7,7 +7,7 @@ import { useCLients } from "@/hooks/useClients";
 import { useState } from "react";
 import { IRole } from "@/types/User";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { IClient, IClientRow } from "@/types/Client";
+import { IClientRow } from "@/types/Client";
 
 
 export default function Client() {

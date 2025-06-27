@@ -85,7 +85,7 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
       ...address,
       number,
       complement,
-      role: initialData.role || 'client',
+      role: 'client',
     };
 
      queryClient.setQueryData(['user'], payload);
