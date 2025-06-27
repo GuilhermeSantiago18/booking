@@ -6,6 +6,7 @@ const { createLog } = require('./LogService');
 const CustomError = require('../errors/CustomError');
 
 async function registerClient(data) {
+  console.log("data", data)
   const {
     firstName,
     lastName,
@@ -15,6 +16,9 @@ async function registerClient(data) {
     number,
     complement,
     role,
+    status,
+    canSchedule,
+    canViewLogs
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
@@ -40,32 +44,9 @@ async function registerClient(data) {
     city,
     state,
     role: role,
-  });
-
-  return user;
-}
-
-async function createAdmin(data) {
-  const { email, password } = data;
-
-  const userExists = await User.findOne({ where: { email } });
-  if (userExists) throw new CustomError('Email already registered', 409);
-
-  const hashedPassword = await bcryptjs.hash(password, 10);
-
-  const user = await User.create({
-    email,
-    password: hashedPassword,
-    role: 'admin',
-    firstName: 'Admin',
-    lastName: 'User',
-    cep: '0000000',
-    street: 'Admin Street',
-    number: '0',
-    complement: '',
-    district: 'Admin District',
-    city: 'Admin City',
-    state: 'Admin State',
+    status,
+    canViewLogs,
+    canSchedule
   });
 
   return user;
@@ -110,6 +91,9 @@ async function update(userId, data) {
     district,
     city,
     state,
+    canSchedule,
+    canViewLogs,
+    status
   } = data;
 
   if (password) {
@@ -125,6 +109,9 @@ async function update(userId, data) {
   user.district = district ?? user.district;
   user.city = city ?? user.city;
   user.state = state ?? user.state;
+  user.canSchedule = canSchedule ?? user.canSchedule
+  user.canSchedule = canViewLogs ?? user.canViewLogs
+  user.canSchedule = status ?? user.status
 
   await user.save();
   return user;
@@ -139,7 +126,6 @@ async function getUserByID(id) {
 
 module.exports = {
   registerClient,
-  createAdmin,
   login,
   update,
   getUserByID
