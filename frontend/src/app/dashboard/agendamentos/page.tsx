@@ -12,7 +12,6 @@ import { Check, X } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
-import toast from "react-hot-toast";
 
 export default function Agendamentos() {
   const { appointments, isLoading, error, createAppointment, updateStatusAppointment  } = useAppointments();
@@ -51,7 +50,7 @@ export default function Agendamentos() {
     setIsModalOpen(false);
     }
     catch(error) {
-      toast.error('Erro ao confirmar agendamento');
+        console.error(error, 'confirm appointment')
     }
   };
 
@@ -60,7 +59,7 @@ export default function Agendamentos() {
     await updateRoom.mutateAsync(data)
     setIsModalOpen(false);
     }catch(error) {
-      toast.error('Erro ao atualizar sala');
+      console.error(error, 'update room')
     }
     
   }
