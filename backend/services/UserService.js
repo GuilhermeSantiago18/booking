@@ -2,6 +2,7 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/User');
 const { generateToken } = require('../utils/jwt');
 const { fetchAddressByCep } = require('./CepService');
+const { createLog } = require('./LogService');
 const CustomError = require('../errors/CustomError');
 
 async function registerClient(data) {
@@ -82,6 +83,13 @@ async function login({ email, password }) {
     role: user.role,
     email: user.email,
   });
+
+     await createLog({
+      user_id: user.id,
+      type: 'Login',
+      module: 'Minha conta',
+    });
+
 
   return { user, token };
 }
