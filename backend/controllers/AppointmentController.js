@@ -41,12 +41,15 @@ async function deleteAppointment(req, res, next) {
   }
 }
 
-async function confirmAppointment(req, res, next) {
+async function updateStatusAppointment(req, res, next) {
   try {
     const userRole = req.user.role;
     const { id } = req.params;
+    const {status} = req.body
 
-    await AppointmentService.confirmAppointment(id, userRole);
+    console.log(status)
+
+    await AppointmentService.updateStatusAppointment(id, userRole, status);
     return res.status(204).send();
   } catch (err) {
     next(err);
@@ -59,5 +62,5 @@ module.exports = {
   createAppointment,
   getAll,
   deleteAppointment,
-  confirmAppointment
+  updateStatusAppointment
 };

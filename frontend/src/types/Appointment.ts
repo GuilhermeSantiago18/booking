@@ -24,7 +24,7 @@ export interface ICreateAppointmentData {
 
 
 
-type Status = 'CONFIRMADO' | 'CANCELADO';
+export type Status = 'CONFIRMADO' | 'RECUSADO';
 
 export interface IUpdateStatusAppointment {
   id: number;

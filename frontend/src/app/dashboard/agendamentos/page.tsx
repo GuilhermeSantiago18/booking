@@ -80,12 +80,12 @@ const mappedData = filteredAppointments.map(appointment => ({
   if (user.role === 'admin') {
     return (
       <div className="flex gap-2 justify-center">
-        {row.status === 'PENDENTE' && (
-          <button onClick={() => updateStatusAppointment.mutate({id: row.id, status: 'CONFIRMADO'})}>
+        {row.status === 'PENDENTE' && row.status === 'RECUSADO' && (
+          <button onClick={() => updateStatusAppointment.mutate({id: row.id, status: 'RECUSADO'})}>
             <Check className="hover:text-green-600" />
           </button>
         )}
-        <button onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'CANCELADO' })}>
+        <button onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'RECUSADO' })}>
           <X className="hover:text-red-600" />
         </button>
       </div>
@@ -94,7 +94,7 @@ const mappedData = filteredAppointments.map(appointment => ({
 
   if (user.role === 'client' && row.status === 'PENDENTE') {    
     return (
-      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'CANCELADO' })}>
+      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'RECUSADO' })}>
         <X />
       </button>
     );
