@@ -41,10 +41,23 @@ async function deleteAppointment(req, res, next) {
   }
 }
 
+async function confirmAppointment(req, res, next) {
+  try {
+    const userRole = req.user.role;
+    const { id } = req.params;
+
+    await AppointmentService.confirmAppointment(id, userRole);
+    return res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
  
 
 module.exports = {
   createAppointment,
   getAll,
-  deleteAppointment
+  deleteAppointment,
+  confirmAppointment
 };

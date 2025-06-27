@@ -39,6 +39,7 @@ const filteredAppointments = (appointments ?? []).filter((appointment) => {
 
   return searchMatch && dateMatch;
 });
+console.log("filteredAppointments", filteredAppointments)
 
 const mappedData = filteredAppointments.map(appointment => ({
   date: `${appointment.date} às ${appointment.time.slice(0,5)}`,
@@ -75,19 +76,33 @@ const mappedData = filteredAppointments.map(appointment => ({
           { label: 'Status transação', key: 'status' },
         ]}
         data={mappedData}
-        renderActions={(row) =>
-          row.status === 'PENDENTE' && (
-            <div>
-                  <button className="cursor-pointer ml-4 md:ml-8" onClick={() => cancelAppointment.mutate(row.id)}>
-              <X />
-            </button>
+        renderActions={(row) => {
+  if (user.role === 'admin') {
+    return (
+      <div className="flex gap-2 justify-center">
+        {row.status === 'PENDENTE' && (
+          <button onClick={() => confirmAppointment.mutate(row.id)}>
+            <Check className="hover:text-green-600" />
+          </button>
+        )}
+        <button onClick={() => cancelAppointment.mutate(row.id)}>
+          <X className="hover:text-red-600" />
+        </button>
+      </div>
+    );
+  }
 
-            <button className="cursor-pointer ml-4 md:ml-8" onClick={() => confirmAppointment.mutate(row.id)}>
-              <Check />
-            </button>
-               </div>
-          ) 
-        }
+  if (user.role === 'client' && row.status === 'PENDENTE') {
+    return (
+      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => cancelAppointment.mutate(row.id)}>
+        <X />
+      </button>
+    );
+  }
+
+  return null;
+}}
+
       />
 
       <ModalAgendamento

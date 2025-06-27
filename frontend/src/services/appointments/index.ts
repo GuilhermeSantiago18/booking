@@ -15,7 +15,8 @@ export async function cancelAppointment(id: number): Promise<void> {
   await api.delete(`/appointments/${id}`);
 }
 
-export async function confirmAppointment(id: number): Promise<void> {
-  await api.patch(`/appointments/${id}`);
+export async function confirmAppointment(id: number, data: { status: 'CONFIRMADO' }): Promise<void> {
+  console.log('id', id)
+  await api.patch(`/appointments/${id}`, data);
 }
 

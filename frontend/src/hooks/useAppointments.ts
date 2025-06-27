@@ -29,7 +29,7 @@ export function useAppointments() {
   });
 
   const confirmMutation = useMutation({
-    mutationFn:confirmAppointment,
+    mutationFn: confirmAppointment,
     onSuccess: () => {
       toast.success('Agendamento confirmado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });

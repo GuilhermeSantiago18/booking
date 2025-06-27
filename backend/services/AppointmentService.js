@@ -73,6 +73,29 @@ async function deleteAppointment(userId, appointmentId, userRole) {
   await Appointment.destroy({ where: { id: appointmentId } });
 }
 
+async function confirmAppointment(appointmentId, userRole) {
+  if (userRole !== 'admin') {
+    const error = new Error('Acesso negado: apenas admins podem confirmar agendamentos', 401);
+    error.status = 403;
+    throw error;
+  }
+
+  const appointment = await Appointment.findByPk(appointmentId);
+
+  if (!appointment) {
+    throw new CustomError('Agendamento não encontrado', 404);
+
+  }
+
+  if (appointment.status === 'CONFIRMADO') {
+   throw new CustomError('Agendamento já confirmado', 400);
+  }
+
+  appointment.status = 'CONFIRMADO';
+  await appointment.save();
+}
+
+
 
 
 
@@ -80,5 +103,6 @@ module.exports = {
   createAppointment,
   getAll,
   getAllByUser,
-  deleteAppointment
+  deleteAppointment,
+  confirmAppointment
 };
