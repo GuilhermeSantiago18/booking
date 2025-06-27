@@ -110,8 +110,8 @@ async function update(userId, data) {
   user.city = city ?? user.city;
   user.state = state ?? user.state;
   user.canSchedule = canSchedule ?? user.canSchedule
-  user.canSchedule = canViewLogs ?? user.canViewLogs
-  user.canSchedule = status ?? user.status
+  user.canViewLogs = canViewLogs ?? user.canViewLogs
+  user.status = status ?? user.status
 
   await user.save();
   return user;
