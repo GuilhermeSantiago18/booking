@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/useUser";
 import { useLogs } from "@/hooks/useLogs";
 import { IRole } from "@/types/User";
 import { ILogRowTable } from "@/types/Logs";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 
 export default function Logs() {
   const { user } = useUser();
@@ -51,6 +52,28 @@ export default function Logs() {
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
+  const baseHeaders = [
+  { label: 'Tipo de atividade', key: 'type' as keyof ILogRowTable },
+  { label: 'Módulo', key: 'module' as keyof ILogRowTable },
+  {
+    label: (
+      <button onClick={handleSortClick} className="flex items-center cursor-pointer">
+        Data
+        {sortOrder === 'asc' ? (
+          <ArrowUp size={20} className="ml-1" />
+        ) : (
+          <ArrowDown size={20} className="ml-1" />
+        )}
+      </button>
+    ),
+    key: 'dateTime' as keyof ILogRowTable,
+  },
+];
+
+const headers = isAdmin
+  ? [{ label: 'Cliente', key: 'client' as keyof ILogRowTable }, ...baseHeaders]
+  : baseHeaders;
+
   return (
     <>
       <FilterBar
@@ -64,22 +87,10 @@ export default function Logs() {
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar logs.</p>}
 
-      <Table<ILogRowTable>
-        headers={[
-          ...(isAdmin ? [{ label: 'Cliente', key: 'client' as keyof ILogRowTable }] : []),
-          { label: 'Tipo de atividade', key: 'type' as keyof ILogRowTable },
-          { label: 'Módulo', key: 'module' as keyof ILogRowTable },
-          {
-            label: (
-              <button onClick={handleSortClick} className="hover:underline">
-                Data {sortOrder === 'asc' ? '↑' : '↓'}
-              </button>
-            ),
-            key: 'dateTime' as keyof ILogRowTable,
-          },
-        ]}
-        data={sortedData}
-      />
+   <Table<ILogRowTable>
+  headers={headers}
+  data={sortedData}
+/>
     </>
   );
 }
