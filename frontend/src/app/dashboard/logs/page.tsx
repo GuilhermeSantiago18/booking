@@ -60,9 +60,9 @@ export default function Logs() {
       <button onClick={handleSortClick} className="flex items-center cursor-pointer">
         Data
         {sortOrder === 'asc' ? (
-          <ArrowUp size={20} className="ml-1" />
+          <ArrowUp size={20} className="ml-2" />
         ) : (
-          <ArrowDown size={20} className="ml-1" />
+          <ArrowDown size={20} className="ml-2" />
         )}
       </button>
     ),
@@ -77,20 +77,20 @@ const headers = isAdmin
   return (
     <>
       <FilterBar
-        search={search}
-        onSearchChange={setSearch}
-        date={date}
-        onDateChange={setDate}
-        role={user.role}
-      />
+              search={search}
+              onSearchChange={setSearch}
+              date={date}
+              onDateChange={setDate}
+              role={user.role} 
+              showButton={false}      />
 
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar logs.</p>}
 
    <Table<ILogRowTable>
-  headers={headers}
-  data={sortedData}
-/>
+        headers={headers}
+        data={sortedData}
+        />
     </>
   );
 }
