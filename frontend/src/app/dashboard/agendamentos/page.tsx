@@ -9,13 +9,20 @@ import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, ICreateAppointmentData } from "@/types/Appointment";
 import { Check, X } from "lucide-react";
+import { useRooms } from "@/hooks/useRooms";
+import { IRoom } from "@/types/Room";
 
 export default function Agendamentos() {
-  const { appointments, isLoading, error, cancelAppointment, createAppointment, updateStatusAppointment  } = useAppointments();
+  const { appointments, isLoading, error, createAppointment, updateStatusAppointment  } = useAppointments();
+  const {updateRoom } = useRooms()
   const { user } = useUser();
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const isAdmin = user?.role === 'admin';
+  const isClient = user?.role === 'client';
+
 
   const handleActionClick = () => {
     setIsModalOpen(true);
@@ -29,6 +36,12 @@ export default function Agendamentos() {
     catch(error) {
     }
   };
+
+  const handleUpdateRoom = async (data: IRoom) => {
+    console.log("data", data)
+    await updateRoom.mutateAsync(data)
+    setIsModalOpen(false);
+  }
 
   if (!user) return null;
 
@@ -130,7 +143,7 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
       <ModalAgendamento
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={handleConfirmModal}
+        onConfirm={isClient ? handleConfirmModal : handleUpdateRoom}
         role={user.role}
       />
     </>

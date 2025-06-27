@@ -13,10 +13,10 @@ interface ModalAgendamentoProps {
 }
 
 export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: ModalAgendamentoProps) {
-  const { data: rooms, isLoading, error } = useRooms();
+  const { rooms, isLoading, error } = useRooms();
   const [formData, setFormData] = useState({});
 
-  if (!isOpen) return null;
+  if (!isOpen || !rooms) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -36,7 +36,7 @@ export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: M
           role === 'client' ? (
             <ClientForm rooms={rooms || []} onChange={setFormData} />
           ) : (
-            <AdminForm onChange={setFormData} />
+            <AdminForm onChange={setFormData} rooms={rooms || []} />
           )
         )}
 

@@ -27,7 +27,7 @@ async function getRoomById(req, res) {
   }
 }
 
-async function updateRoom(req, res) {
+async function updateRoom(req, res, next) {
   try {
     const room = await RoomService.updateRoom(req.params.id, req.body);
     res.json(room);
