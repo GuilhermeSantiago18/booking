@@ -8,7 +8,7 @@ import { useUser } from "@/hooks/useUser";
 import { useLogs } from "@/hooks/useLogs";
 import { IRole } from "@/types/User";
 import { ILogRowTable } from "@/types/Logs";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 export default function Logs() {
   const { user } = useUser();
@@ -70,7 +70,7 @@ export default function Logs() {
   {
     label: (
       <button onClick={handleSortClick} className="flex items-center cursor-pointer">
-        Data
+        Data de registro
         {sortOrder === 'asc' ? (
           <ArrowUp size={20} className="ml-2" />
         ) : (
