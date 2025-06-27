@@ -30,3 +30,10 @@ export interface IUpdateStatusAppointment {
   id: number;
   status: Status;
 }
+
+
+export enum AppointmentStatus {
+  PENDENTE = 'PENDENTE',
+  CONFIRMADO = 'CONFIRMADO',
+  RECUSADO = 'RECUSADO'
+}

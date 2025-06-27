@@ -7,7 +7,7 @@ import { useUser } from "@/hooks/useUser";
 import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
-import { ICreateAppointmentData } from "@/types/Appointment";
+import { AppointmentStatus, ICreateAppointmentData } from "@/types/Appointment";
 import { Check, X } from "lucide-react";
 
 export default function Agendamentos() {
@@ -39,7 +39,6 @@ const filteredAppointments = (appointments ?? []).filter((appointment) => {
 
   return searchMatch && dateMatch;
 });
-console.log("filteredAppointments", filteredAppointments)
 
 const mappedData = filteredAppointments.map(appointment => ({
   date: `${appointment.date} às ${appointment.time.slice(0,5)}`,
@@ -50,6 +49,49 @@ const mappedData = filteredAppointments.map(appointment => ({
   time: appointment.time,
   room_id: appointment.room_id,
 }));
+
+function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) {
+  const handleClick = (status: AppointmentStatus) => {
+    updateStatus.mutate({ id: row.id, status });
+  };
+
+  if (userRole === "admin") {
+    if (row.status === AppointmentStatus.PENDENTE) {
+      return (
+        <div className="flex gap-2 justify-center">
+          <button onClick={() => handleClick(AppointmentStatus.CONFIRMADO)}>
+            <Check className="hover:text-green-600" />
+          </button>
+          <button onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+            <X className="hover:text-red-600" />
+          </button>
+        </div>
+      );
+    }
+
+    if (row.status === AppointmentStatus.CONFIRMADO) {
+      return (
+        <div className="flex gap-2 justify-center">
+          <button onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+            <X className="hover:text-red-600" />
+          </button>
+        </div>
+      );
+    }
+
+    return null;
+  }
+
+  if (userRole === "client" && row.status === AppointmentStatus.PENDENTE) {
+    return (
+      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+        <X />
+      </button>
+    );
+  }
+
+  return null;
+}
 
 
 
@@ -76,32 +118,12 @@ const mappedData = filteredAppointments.map(appointment => ({
           { label: 'Status transação', key: 'status' },
         ]}
         data={mappedData}
-        renderActions={(row) => {
-  if (user.role === 'admin') {
-    return (
-      <div className="flex gap-2 justify-center">
-        {row.status === 'PENDENTE' && row.status === 'RECUSADO' && (
-          <button onClick={() => updateStatusAppointment.mutate({id: row.id, status: 'RECUSADO'})}>
-            <Check className="hover:text-green-600" />
-          </button>
-        )}
-        <button onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'RECUSADO' })}>
-          <X className="hover:text-red-600" />
-        </button>
-      </div>
-    );
-  }
-
-  if (user.role === 'client' && row.status === 'PENDENTE') {    
-    return (
-      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'RECUSADO' })}>
-        <X />
-      </button>
-    );
-  }
-
-  return null;
-}}
+         renderActions={(row) =>
+    renderAppointmentActions({
+      row,
+      userRole: user.role,
+      updateStatus: updateStatusAppointment,
+    })}
 
       />
 
