@@ -74,6 +74,19 @@ const User = sequelize.define(
       allowNull: false,
       defaultValue: 'client',
     },
+    canSchedule: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    },
+    canViewLogs: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
   },
   {
     tableName: 'users',
