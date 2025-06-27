@@ -25,8 +25,9 @@ export interface IClientRow {
   createdAt: string;
   nome: string;
   endereco: string;
-  permissoes: string;
-  status: string;
+  canSchedule: boolean;
+  canViewLogs: boolean;
+  status: boolean;
 }
 
 export interface IUpdateClient {

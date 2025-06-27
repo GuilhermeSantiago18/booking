@@ -4,11 +4,11 @@ import Image from "next/image";
 
 interface Column<T> {
   label: string | React.ReactNode;
-  key: keyof T;
+  key: keyof T | string; // para permitir ações sem depender de uma propriedade real do tipo T
 }
 
 interface TableProps<T> {
-  headers: Column<T>[];
+  headers: Column<T>[]; // todos os headers vêm daqui, inclusive o de "Ação"
   data: T[];
   renderActions?: (row: T) => React.ReactNode;
   getRowClassName?: (row: T) => string;
@@ -22,7 +22,7 @@ export default function Table<T>({
 }: TableProps<T>) {
   if (data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center  md:h-[calc(70vh)] p-4">
+      <div className="flex flex-col items-center justify-center md:h-[calc(70vh)] p-4">
         <Image
           src="/assets/Dashboard.svg"
           alt="Dashboard"
@@ -30,7 +30,9 @@ export default function Table<T>({
           height={200}
           className="mb-4"
         />
-        <p className="font-medium text-center text-lg font-montserrat">Nada por aqui ainda...</p>
+        <p className="font-medium text-center text-lg font-montserrat">
+          Nada por aqui ainda...
+        </p>
       </div>
     );
   }
@@ -40,19 +42,14 @@ export default function Table<T>({
       <table className="min-w-full table-auto border">
         <thead className="bg-gray-100">
           <tr>
-            {headers.map((header) => (
+            {headers.map((header, index) => (
               <th
-                key={String(header.key)}
+                key={String(index)}
                 className="text-left px-4 py-2 border-b"
               >
                 {header.label}
               </th>
             ))}
-            {renderActions && (
-              <th className="px-4 py-2 border-b">
-                Ação
-              </th>
-            )}
           </tr>
         </thead>
         <tbody>
@@ -61,14 +58,21 @@ export default function Table<T>({
               key={idx}
               className={getRowClassName ? getRowClassName(row) : "bg-white"}
             >
-              {headers.map((header) => (
-                <td key={String(header.key)} className="px-4 py-2 border-b">
-                  {String(row[header.key])}
-                </td>
-              ))}
-              {renderActions && (
-                <td className="px-4 py-2 border-b">{renderActions(row)}</td>
-              )}
+              {headers.map((header) => {
+                if (header.key === 'actions') {
+                  return (
+                    <td key="actions" className="px-4 py-2 border-b text-center">
+                      {renderActions?.(row)}
+                    </td>
+                  );
+                }
+
+                return (
+                  <td key={String(header.key)} className="px-4 py-2 border-b">
+                    {String(row[header.key as keyof T])}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

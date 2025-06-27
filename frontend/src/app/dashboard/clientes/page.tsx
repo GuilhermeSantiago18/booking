@@ -6,12 +6,12 @@ import Loading from "@/components/Loading";
 import { useCLients } from "@/hooks/useClients";
 import { useState } from "react";
 import { IRole } from "@/types/User";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, X } from "lucide-react";
 import { IClientRow } from "@/types/Client";
 
 
 export default function Client() {
-  const { clients, isLoading, error } = useCLients();
+  const { clients, isLoading, error, updateClient} = useCLients();
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -33,16 +33,15 @@ export default function Client() {
   });
 
   const mappedData: IClientRow[] = sortedClients.map(client => ({
-    id: client.id,
-    createdAt: new Date(client.createdAt).toLocaleDateString('pt-BR'),
-    nome: `${client.firstName} ${client.lastName}`,
-    endereco: `${client.street}, ${client.number || 'S/N'} - ${client.district}, ${client.city} - ${client.state}`,
-    permissoes: [
-      client.canSchedule ? 'Agendamento' : '',
-      client.canViewLogs ? 'Logs' : ''
-    ].filter(Boolean).join(', '),
-    status: client.status ? 'Ativo' : 'Inativo',
-  }));
+  id: client.id,
+  createdAt: new Date(client.createdAt).toLocaleDateString('pt-BR'),
+  nome: `${client.firstName} ${client.lastName}`,
+  endereco: `${client.street}, ${client.number || 'S/N'} - ${client.district}, ${client.city} - ${client.state}`,
+  canSchedule: client.canSchedule,
+  canViewLogs: client.canViewLogs,
+  status: client.status,
+}));
+
 
   const handleSortClick = () => {
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
@@ -80,7 +79,34 @@ export default function Client() {
           { label: 'Status', key: 'status' },
         ]}
         data={mappedData}
-        getRowClassName={(row) => (row.status === 'Ativo' ? 'bg-[#F2FFFD]' : 'bg-[#FFF3F3]')}
+        renderActions={(row) => (
+  <div className="flex gap-2">
+    <button
+      className={`px-2 py-1 rounded text-sm ${
+        row.canSchedule ? 'bg-black text-white' : 'bg-gray-200 text-black'
+      }`}
+      onClick={() => updateClient.mutate({ id: row.id, data: { canSchedule: !row.canSchedule } })}
+    >
+      Agendamento
+    </button>
+
+    <button
+      className={`px-2 py-1 rounded text-sm ${
+        row.canViewLogs ? 'bg-black text-white' : 'bg-gray-200 text-black'
+      }`}
+      onClick={() => updateClient.mutate({ id: row.id, data: { canViewLogs: !row.canViewLogs } })}
+    >
+      Logs
+    </button>
+
+    <button
+      className="text-gray-600 hover:text-black"
+      onClick={() => updateClient.mutate({ id: row.id, data: { status: !row.status } })}
+    >
+      {row.status ? <Check size={18} className="text-green-600" /> : <X size={18} className="text-red-600" />}
+    </button>
+  </div>
+)}
       />
     </>
   );

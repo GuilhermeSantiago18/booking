@@ -156,39 +156,40 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar agendamentos.</p>}
      
-       <Table<IAppointmentRow>
-        headers={[
-          {
-            label: (
-              <button onClick={handleSortClick} className="flex items-center cursor-pointer">
-                Data de agendamento
-                {sortOrder === 'asc' ? (
-                  <ArrowUp size={20} className="ml-2" />
-                ) : (
-                  <ArrowDown size={20} className="ml-2" />
-                )}
-              </button>
-            ),
-            key: 'date',
-          },
-          { label: 'Nome', key: 'nome' },
-          { label: 'Sala de agendamento', key: 'roomName' },
-          { label: 'Status transação', key: 'status' },
-        ]}
-        data={mappedData}
-        getRowClassName={(row) => {
-          if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
-          if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
-          return 'bg-white';
-        }}
-        renderActions={(row) =>
-          renderAppointmentActions({
-            row,
-            userRole: user.role,
-            updateStatus: updateStatusAppointment,
-          })
-        }
-      />
+      <Table<IAppointmentRow>
+  headers={[
+    {
+      label: (
+        <button onClick={handleSortClick} className="flex items-center cursor-pointer">
+          Data de agendamento
+          {sortOrder === 'asc' ? (
+            <ArrowUp size={20} className="ml-2" />
+          ) : (
+            <ArrowDown size={20} className="ml-2" />
+          )}
+        </button>
+      ),
+      key: 'date',
+    },
+    { label: 'Nome', key: 'nome' },
+    { label: 'Sala de agendamento', key: 'roomName' },
+    { label: 'Status transação', key: 'status' },
+    { label: 'Ação', key: 'actions' },
+  ]}
+  data={mappedData}
+  getRowClassName={(row) => {
+    if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
+    if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
+    return 'bg-white';
+  }}
+  renderActions={(row) =>
+    renderAppointmentActions({
+      row,
+      userRole: user.role,
+      updateStatus: updateStatusAppointment,
+    })
+  }
+/>
 
 
       <ModalAgendamento
