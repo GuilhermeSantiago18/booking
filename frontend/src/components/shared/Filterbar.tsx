@@ -1,13 +1,14 @@
 import CustomInput from '@/components/Inputs/CustomInput';
 import DateInput from '@/components/Inputs/DateInput';
 import MainButton from '@/components/buttons/MainButton';
+import { IRole } from '@/types/User';
 
 interface FilterBarProps {
   search: string;
   onSearchChange: (value: string) => void;
   date: string;
   onDateChange: (value: string) => void;
-  role: 'admin' | 'client';
+  role: IRole;
   onActionClick?: () => void;
 }
 

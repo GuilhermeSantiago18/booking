@@ -7,10 +7,12 @@ import { useUser } from "@/hooks/useUser";
 import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
-import { AppointmentStatus, ICreateAppointmentData } from "@/types/Appointment";
+import { AppointmentStatus, IAppointment, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
 import { Check, X } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
+import { IRole } from "@/types/User";
+import toast from "react-hot-toast";
 
 export default function Agendamentos() {
   const { appointments, isLoading, error, createAppointment, updateStatusAppointment  } = useAppointments();
@@ -20,8 +22,23 @@ export default function Agendamentos() {
   const [date, setDate] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const isAdmin = user?.role === 'admin';
-  const isClient = user?.role === 'client';
+  if (!user) return null;
+
+  const { role } = user;
+
+  if (role !== IRole.ADMIN && role !== IRole.CLIENT) return null;
+
+  const isClient = role === IRole.CLIENT;
+
+  interface ActionProps {
+  row: {
+    id: number;
+    status: AppointmentStatus;
+  };
+  userRole: IRole;
+  updateStatus: ReturnType<typeof useAppointments>['updateStatusAppointment'];
+}
+
 
 
   const handleActionClick = () => {
@@ -34,16 +51,21 @@ export default function Agendamentos() {
     setIsModalOpen(false);
     }
     catch(error) {
+      toast.error('Erro ao confirmar agendamento');
     }
   };
 
   const handleUpdateRoom = async (data: IRoom) => {
-    console.log("data", data)
+    try {
     await updateRoom.mutateAsync(data)
     setIsModalOpen(false);
+    }catch(error) {
+      toast.error('Erro ao atualizar sala');
+    }
+    
   }
 
-  if (!user) return null;
+
 
 const filteredAppointments = (appointments ?? []).filter((appointment) => {
   const fullName = `${appointment.User.firstName} ${appointment.User.lastName}`.toLowerCase();
@@ -53,7 +75,7 @@ const filteredAppointments = (appointments ?? []).filter((appointment) => {
   return searchMatch && dateMatch;
 });
 
-const mappedData = filteredAppointments.map(appointment => ({
+const mappedData: IAppointmentRow[] = filteredAppointments.map(appointment => ({
   date: `${appointment.date} às ${appointment.time.slice(0,5)}`,
   nome: `${appointment.User.firstName} ${appointment.User.lastName}`,
   roomName: appointment.Room.name,
@@ -122,23 +144,30 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
 
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar agendamentos.</p>}
-
-      <Table
-        headers={[
+     
+      <Table<IAppointmentRow>
+   headers={[
           { label: 'Data de agendamento', key: 'date' },
           { label: 'Nome', key: 'nome' },
           { label: 'Sala de agendamento', key: 'roomName' },
           { label: 'Status transação', key: 'status' },
         ]}
-        data={mappedData}
-         renderActions={(row) =>
+
+    data={mappedData}
+   getRowClassName={(row) => {
+    if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
+    if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
+    return 'bg-white';
+  }}
+  renderActions={(row) =>
     renderAppointmentActions({
       row,
       userRole: user.role,
       updateStatus: updateStatusAppointment,
-    })}
+    })
+  }
+/>
 
-      />
 
       <ModalAgendamento
         isOpen={isModalOpen}

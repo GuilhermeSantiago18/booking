@@ -1,7 +1,7 @@
 export interface IUser {
   firstName: string;
   lastName: string;
-  role: 'admin' | 'client';
+  role: IRole;
 }
 
 export interface IUserFormData {
@@ -16,5 +16,12 @@ export interface IUserFormData {
   district: string;
   number?: string;
   complement?: string;
-  role: string;
+  role: IRole;
+}
+
+
+export enum IRole {
+  ADMIN = 'admin',
+  CLIENT = 'client',
+
 }

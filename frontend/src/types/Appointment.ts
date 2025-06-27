@@ -1,9 +1,31 @@
+import { JSX } from "react";
+
+
+export interface ICreateAppointmentData {
+  date: string;
+  time: string;
+  room: string;
+}
+
+
+export enum AppointmentStatus {
+  PENDENTE = 'PENDENTE',
+  CONFIRMADO = 'CONFIRMADO',
+  RECUSADO = 'RECUSADO'
+}
+
+export interface IUpdateStatusAppointment {
+  id: number;
+  status: AppointmentStatus;
+}
+
+
 export interface IAppointment {
   room_id: number;
   id: number;
   date: string;
   time: string;
-  status: 'PENDENTE' | 'CONFIRMADO' | 'RECUSADO';
+  status: AppointmentStatus
   User: {
     firstName: string;
     lastName: string;
@@ -16,24 +38,12 @@ export interface IAppointment {
   updatedAt: string;
 }
 
-export interface ICreateAppointmentData {
-  date: string;
-  time: string;
-  room: string;
-}
-
-
-
-export type Status = 'CONFIRMADO' | 'RECUSADO';
-
-export interface IUpdateStatusAppointment {
+export interface IAppointmentRow {
   id: number;
-  status: Status;
-}
-
-
-export enum AppointmentStatus {
-  PENDENTE = 'PENDENTE',
-  CONFIRMADO = 'CONFIRMADO',
-  RECUSADO = 'RECUSADO'
+  status: AppointmentStatus;
+  date: string;
+  nome: string;       
+  roomName: string;   
+  time: string;
+  room_id: number;
 }
