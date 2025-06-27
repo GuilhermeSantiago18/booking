@@ -21,3 +21,12 @@ export interface ICreateAppointmentData {
   time: string;
   room: string;
 }
+
+
+
+type Status = 'CONFIRMADO' | 'CANCELADO';
+
+export interface IUpdateStatusAppointment {
+  id: number;
+  status: Status;
+}

@@ -11,7 +11,7 @@ import { ICreateAppointmentData } from "@/types/Appointment";
 import { Check, X } from "lucide-react";
 
 export default function Agendamentos() {
-  const { appointments, isLoading, error, cancelAppointment, createAppointment, confirmAppointment } = useAppointments();
+  const { appointments, isLoading, error, cancelAppointment, createAppointment, updateStatusAppointment  } = useAppointments();
   const { user } = useUser();
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
@@ -81,20 +81,20 @@ const mappedData = filteredAppointments.map(appointment => ({
     return (
       <div className="flex gap-2 justify-center">
         {row.status === 'PENDENTE' && (
-          <button onClick={() => confirmAppointment.mutate(row.id)}>
+          <button onClick={() => updateStatusAppointment.mutate({id: row.id, status: 'CONFIRMADO'})}>
             <Check className="hover:text-green-600" />
           </button>
         )}
-        <button onClick={() => cancelAppointment.mutate(row.id)}>
+        <button onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'CANCELADO' })}>
           <X className="hover:text-red-600" />
         </button>
       </div>
     );
   }
 
-  if (user.role === 'client' && row.status === 'PENDENTE') {
+  if (user.role === 'client' && row.status === 'PENDENTE') {    
     return (
-      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => cancelAppointment.mutate(row.id)}>
+      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => updateStatusAppointment.mutate({ id: row.id, status: 'CANCELADO' })}>
         <X />
       </button>
     );

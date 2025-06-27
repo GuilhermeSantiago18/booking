@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllAppointments, createAppointment, cancelAppointment, confirmAppointment } from '@/services/appointments';
-import { IAppointment } from '@/types/Appointment';
+import { getAllAppointments, createAppointment, cancelAppointment, updateStatusAppointment } from '@/services/appointments';
+import { IAppointment, IUpdateStatusAppointment } from '@/types/Appointment';
 import toast from 'react-hot-toast';
 
 export function useAppointments() {
@@ -28,10 +28,10 @@ export function useAppointments() {
     },
   });
 
-  const confirmMutation = useMutation({
-    mutationFn: confirmAppointment,
-    onSuccess: () => {
-      toast.success('Agendamento confirmado!');
+   const updateStatusMutation = useMutation<void, Error, IUpdateStatusAppointment>({
+    mutationFn: updateStatusAppointment,
+    onSuccess: (_, variables) => {
+      toast.success(`Agendamento ${variables.status.toLowerCase()}!`);
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
     },
   });
@@ -42,6 +42,6 @@ export function useAppointments() {
     error,
     createAppointment: createMutation,
     cancelAppointment: cancelMutation,
-    confirmAppointment: confirmMutation,
+    updateStatusAppointment: updateStatusMutation,
   };
 }
