@@ -8,7 +8,7 @@ import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, IAppointment, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
-import { ArrowDown, ArrowUp, Check, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, CircleCheck, CircleX, X } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
@@ -101,12 +101,12 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
   if (userRole === "admin") {
     if (row.status === AppointmentStatus.PENDENTE) {
       return (
-        <div className="flex gap-2 justify-center">
+        <div className="flex gap-2 justify-start">
           <button onClick={() => handleClick(AppointmentStatus.CONFIRMADO)}>
-            <Check className="hover:text-green-600" />
+            <CircleCheck className="hover:text-green-600 cursor-pointer" />
           </button>
           <button onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
-            <X className="hover:text-red-600" />
+            <CircleX className="hover:text-red-600 cursor-pointer" />
           </button>
         </div>
       );

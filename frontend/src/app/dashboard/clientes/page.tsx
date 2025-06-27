@@ -6,7 +6,7 @@ import Loading from "@/components/Loading";
 import { useCLients } from "@/hooks/useClients";
 import { useState } from "react";
 import { IRole } from "@/types/User";
-import { ArrowDown, ArrowUp, Check, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, CheckCircle, ToggleLeft, ToggleRight, X, XCircle } from "lucide-react";
 import { IClientRow } from "@/types/Client";
 
 
@@ -39,8 +39,35 @@ export default function Client() {
   endereco: `${client.street}, ${client.number || 'S/N'} - ${client.district}, ${client.city} - ${client.state}`,
   canSchedule: client.canSchedule,
   canViewLogs: client.canViewLogs,
-  status: client.status,
+  permissoes: (
+    <div className="flex gap-2">
+      <button
+        className={`px-2 py-1 rounded text-sm cursor-pointer ${
+          client.canSchedule ? 'bg-black text-white' : 'bg-gray-200 text-black'
+        }`}
+        onClick={() => updateClient.mutate({ id: client.id, data: { canSchedule: !client.canSchedule } })}
+      >
+        Agendamento
+      </button>
+      <button
+        className={`px-2 py-1 rounded text-sm  cursor-pointer ${
+          client.canViewLogs ? 'bg-black text-white' : 'bg-gray-200 text-black'
+        }`}
+        onClick={() => updateClient.mutate({ id: client.id, data: { canViewLogs: !client.canViewLogs } })}
+      >
+        Logs
+      </button>
+    </div>
+  ),
+  status: client.status 
+    ? <button className="cursor-pointer" onClick={() => updateClient.mutate({ id: client.id, data: { status: !client.status } })}>
+      <CheckCircle size={20} className="text-green-600 ml-4" /> 
+      </button>
+    : <button onClick={() => updateClient.mutate({ id: client.id, data: { status: !client.status } })}>
+      <XCircle size={20} className="text-red-600 ml-4" /> 
+      </button>
 }));
+
 
 
   const handleSortClick = () => {
@@ -79,34 +106,7 @@ export default function Client() {
           { label: 'Status', key: 'status' },
         ]}
         data={mappedData}
-        renderActions={(row) => (
-  <div className="flex gap-2">
-    <button
-      className={`px-2 py-1 rounded text-sm ${
-        row.canSchedule ? 'bg-black text-white' : 'bg-gray-200 text-black'
-      }`}
-      onClick={() => updateClient.mutate({ id: row.id, data: { canSchedule: !row.canSchedule } })}
-    >
-      Agendamento
-    </button>
-
-    <button
-      className={`px-2 py-1 rounded text-sm ${
-        row.canViewLogs ? 'bg-black text-white' : 'bg-gray-200 text-black'
-      }`}
-      onClick={() => updateClient.mutate({ id: row.id, data: { canViewLogs: !row.canViewLogs } })}
-    >
-      Logs
-    </button>
-
-    <button
-      className="text-gray-600 hover:text-black"
-      onClick={() => updateClient.mutate({ id: row.id, data: { status: !row.status } })}
-    >
-      {row.status ? <Check size={18} className="text-green-600" /> : <X size={18} className="text-red-600" />}
-    </button>
-  </div>
-)}
+  
       />
     </>
   );
