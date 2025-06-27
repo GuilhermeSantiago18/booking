@@ -3,7 +3,7 @@ import { getAllClients } from '@/services/clients';
 import { IClient } from '@/types/Client';
 
 
-export function useUser() {
+export function useCLients() {
 
   const { data, isLoading, error } = useQuery<IClient[]>({
     queryKey: ['clients'],

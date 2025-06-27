@@ -19,3 +19,12 @@ export interface IClient {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IClientRow {
+  id: number;
+  createdAt: string;
+  nome: string;
+  endereco: string;
+  permissoes: string;
+  status: string;
+}

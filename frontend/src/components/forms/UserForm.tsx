@@ -62,10 +62,7 @@ export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormP
           });
         }
      } catch (error) {
-       if (error instanceof AxiosError && error.response) {
-        const errorMessage = error.response.data?.error || 'Erro inesperado';
-        toast.error(errorMessage);
-       }
+       console.error('error user form', error)
 } finally {
   setLoad(false);
 }
