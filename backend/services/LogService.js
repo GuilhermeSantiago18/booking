@@ -23,6 +23,7 @@ async function listLogsByUser(userId) {
     include: [
       {
         model: User,
+        as: 'user',
         attributes: ['firstName', 'lastName', 'role'],
       },
     ],

@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 interface Column<T> {
-  label: string;
+  label: string | React.ReactNode;
   key: keyof T;
 }
 

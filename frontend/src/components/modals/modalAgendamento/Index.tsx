@@ -3,7 +3,7 @@ import ClientForm from './ClientForm';
 import AdminForm from './AdminForm';
 import MainButton from '@/components/buttons/MainButton';
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ModalAgendamentoProps {
   isOpen: boolean;
@@ -15,6 +15,12 @@ interface ModalAgendamentoProps {
 export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: ModalAgendamentoProps) {
   const { rooms, isLoading, error } = useRooms();
   const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({});
+    }
+  }, [isOpen]);
 
   if (!isOpen || !rooms) return null;
 

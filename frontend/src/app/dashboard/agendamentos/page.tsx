@@ -8,7 +8,7 @@ import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, IAppointment, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
-import { Check, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, X } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
@@ -20,6 +20,7 @@ export default function Agendamentos() {
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   if (!user) return null;
 
@@ -74,7 +75,13 @@ const filteredAppointments = (appointments ?? []).filter((appointment) => {
   return searchMatch && dateMatch;
 });
 
-const mappedData: IAppointmentRow[] = filteredAppointments.map(appointment => ({
+const sortedAppointments = [...filteredAppointments].sort((a, b) => {
+    const dateTimeA = new Date(`${a.date}T${a.time}`).getTime();
+    const dateTimeB = new Date(`${b.date}T${b.time}`).getTime();
+    return sortOrder === 'asc' ? dateTimeA - dateTimeB : dateTimeB - dateTimeA;
+  });
+
+const mappedData: IAppointmentRow[] = sortedAppointments.map(appointment => ({
   date: `${appointment.date} às ${appointment.time.slice(0,5)}`,
   nome: `${appointment.User.firstName} ${appointment.User.lastName}`,
   roomName: appointment.Room.name,
@@ -83,6 +90,8 @@ const mappedData: IAppointmentRow[] = filteredAppointments.map(appointment => ({
   time: appointment.time,
   room_id: appointment.room_id,
 }));
+
+
 
 function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) {
   const handleClick = (status: AppointmentStatus) => {
@@ -128,11 +137,14 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
 }
 
 
-
+  const handleSortClick = () => {
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  };
 
   return (
     <>
       <FilterBar
+        showButton={true}
         search={search}
         onSearchChange={setSearch}
         date={date}
@@ -144,14 +156,25 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar agendamentos.</p>}
      
-      <Table<IAppointmentRow>
+       <Table<IAppointmentRow>
         headers={[
-          { label: 'Data de agendamento', key: 'date' },
+          {
+            label: (
+              <button onClick={handleSortClick} className="flex items-center cursor-pointer">
+                Data de agendamento
+                {sortOrder === 'asc' ? (
+                  <ArrowUp size={20} className="ml-2" />
+                ) : (
+                  <ArrowDown size={20} className="ml-2" />
+                )}
+              </button>
+            ),
+            key: 'date',
+          },
           { label: 'Nome', key: 'nome' },
           { label: 'Sala de agendamento', key: 'roomName' },
           { label: 'Status transação', key: 'status' },
         ]}
-
         data={mappedData}
         getRowClassName={(row) => {
           if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
@@ -159,13 +182,13 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
           return 'bg-white';
         }}
         renderActions={(row) =>
-        renderAppointmentActions({
-          row,
-          userRole: user.role,
-          updateStatus: updateStatusAppointment,
-        })
-  }
-/>
+          renderAppointmentActions({
+            row,
+            userRole: user.role,
+            updateStatus: updateStatusAppointment,
+          })
+        }
+      />
 
 
       <ModalAgendamento
