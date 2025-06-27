@@ -30,12 +30,7 @@ export default function LoginForm() {
       toast.success(loginResponse.data.message);
       router.push('/dashboard/agendamentos');
     } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        const errorMessage = error.response.data?.error || 'Erro inesperado';
-        toast.error(errorMessage);
-      } else {
-        toast.error('Erro inesperado');
-      }
+      console.error("Error login", error)
     } finally {
       setLoading(false);
     }
