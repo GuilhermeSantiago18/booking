@@ -28,3 +28,9 @@ export interface IClientRow {
   permissoes: string;
   status: string;
 }
+
+export interface IUpdateClient {
+  canSchedule?: boolean,
+  canViewLogs?: boolean,
+  status?: boolean
+}

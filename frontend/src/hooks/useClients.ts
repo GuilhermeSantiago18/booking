@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { getAllClients } from '@/services/clients';
 import { IClient } from '@/types/Client';
-import {updateUser} from '@/services/users'
+import { updateClient } from '@/services/clients';
 
 
 export function useCLients() {
@@ -16,7 +16,7 @@ export function useCLients() {
   });
 
   const updateClientMutation = useMutation({
-    mutationFn: updateUser,
+    mutationFn: updateClient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
