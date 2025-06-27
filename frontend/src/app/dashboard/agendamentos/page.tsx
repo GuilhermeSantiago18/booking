@@ -119,7 +119,7 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
 
   if (userRole === "client" && row.status === AppointmentStatus.PENDENTE) {
     return (
-      <button className="cursor-pointer ml-4 md:ml-8" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+      <button className="cursor-pointer ml-4 md:ml-8 hover:text-red-600" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
         <X />
       </button>
     );
@@ -146,25 +146,25 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
       {error && <p>Erro ao carregar agendamentos.</p>}
      
       <Table<IAppointmentRow>
-   headers={[
+        headers={[
           { label: 'Data de agendamento', key: 'date' },
           { label: 'Nome', key: 'nome' },
           { label: 'Sala de agendamento', key: 'roomName' },
           { label: 'Status transação', key: 'status' },
         ]}
 
-    data={mappedData}
-   getRowClassName={(row) => {
-    if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
-    if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
-    return 'bg-white';
-  }}
-  renderActions={(row) =>
-    renderAppointmentActions({
-      row,
-      userRole: user.role,
-      updateStatus: updateStatusAppointment,
-    })
+        data={mappedData}
+        getRowClassName={(row) => {
+          if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
+          if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
+          return 'bg-white';
+        }}
+        renderActions={(row) =>
+        renderAppointmentActions({
+          row,
+          userRole: user.role,
+          updateStatus: updateStatusAppointment,
+        })
   }
 />
 
