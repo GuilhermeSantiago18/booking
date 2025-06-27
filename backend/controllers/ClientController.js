@@ -9,4 +9,15 @@ async function getAll(req, res, next) {
   }
 }
 
-module.exports = { getAll }
+
+async function updateClient(req, res, next) {
+  try {
+    const client = await ClientService.updateClient(req.params.id, req.body);
+    res.json(client);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+module.exports = { getAll, updateClient }
