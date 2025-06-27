@@ -17,6 +17,9 @@ export interface IUserFormData {
   number?: string;
   complement?: string;
   role: IRole;
+  canViewLogs: boolean,
+  canSchedule: boolean,
+  status: boolean
 }
 
 

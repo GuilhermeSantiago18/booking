@@ -1,6 +1,3 @@
-import { JSX } from "react";
-
-
 export interface ICreateAppointmentData {
   date: string;
   time: string;

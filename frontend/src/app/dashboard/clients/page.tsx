@@ -12,6 +12,6 @@ export default function Client() {
         search={search}
         onSearchChange={setSearch}
         date={date}
-        onDateChange={setDate} role={IRole.ADMIN} showButton={false}        />
+        onDateChange={setDate} role={IRole.ADMIN} showButton={false}     />
     )
 }
