@@ -1,6 +1,7 @@
 'use client'
 
 import FilterBar from "@/components/shared/Filterbar"
+import { IRole } from "@/types/User";
 import { useState } from "react";
 
 export default function Client() {
@@ -11,7 +12,6 @@ export default function Client() {
         search={search}
         onSearchChange={setSearch}
         date={date}
-        onDateChange={setDate}
-        />
+        onDateChange={setDate} role={IRole.ADMIN} showButton={false}        />
     )
 }
