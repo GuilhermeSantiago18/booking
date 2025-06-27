@@ -16,7 +16,23 @@ async function listLogs() {
   });
 }
 
+
+async function listLogsByUser(userId) {
+  return Log.findAll({
+    where: { user_id: userId },
+    include: [
+      {
+        model: User,
+        attributes: ['firstName', 'lastName', 'role'],
+      },
+    ],
+    order: [['createdAt', 'DESC']],
+  });
+}
+
+
 module.exports = {
   createLog,
   listLogs,
+  listLogsByUser
 };
