@@ -25,7 +25,7 @@ export default function FilterBar({
   return (
     <div className="flex flex-col md:flex-row items-start gap-4 mb-6">
       <CustomInput
-        placeholder="Filtre por nome"
+        placeholder={role === 'admin' ? "Filtre por nome" : "Filtre por tipo de atividade ou Módulo"}
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
       />

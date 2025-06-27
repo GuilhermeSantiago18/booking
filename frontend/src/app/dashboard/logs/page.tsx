@@ -23,13 +23,25 @@ export default function Logs() {
   const isAdmin = user.role === IRole.ADMIN;
 
   const filteredLogs = (logs ?? []).filter(log => {
+  if (isAdmin) {
     const fullName = `${log.user.firstName} ${log.user.lastName}`.toLowerCase();
     const searchMatch = fullName.includes(search.toLowerCase());
     const dateMatch = date
       ? new Date(log.createdAt).toISOString().slice(0, 10) === date
       : true;
     return searchMatch && dateMatch;
-  });
+  } else {
+    const searchLower = search.toLowerCase();
+    const searchMatch =
+      log.type.toLowerCase().includes(searchLower) ||
+      log.module.toLowerCase().includes(searchLower);
+    const dateMatch = date
+      ? new Date(log.createdAt).toISOString().slice(0, 10) === date
+      : true;
+    return searchMatch && dateMatch;
+  }
+});
+
 
   const mappedData: ILogRowTable[] = filteredLogs.map(log => ({
     id: log.id,
