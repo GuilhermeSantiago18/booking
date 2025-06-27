@@ -60,7 +60,7 @@ async function updateRoom(id, data) {
   room.startTime = data.startTime || room.startTime;
   room.endTime = data.endTime || room.endTime;
   room.slotDurationMinutes =
-    data.slotDurationMinutes || room.slotDurationMinutes;
+    data.slotDuration || room.slotDurationMinutes;
 
   await room.save();
   return room;
