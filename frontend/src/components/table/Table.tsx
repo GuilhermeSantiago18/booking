@@ -14,7 +14,7 @@ interface TableProps {
 
 export default function Table({ headers, data, renderActions, emptyMessage = 'Nenhum dado encontrado.' }: TableProps) {
   return (
-    <div className="overflow-x-auto bg-white rounded shadow-md">
+    <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat">
       <table className="min-w-full table-auto border">
         <thead className="bg-gray-100">
           <tr>
@@ -33,7 +33,13 @@ export default function Table({ headers, data, renderActions, emptyMessage = 'Ne
             </tr>
           ) : (
             data.map((row, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
+              <tr key={idx}   className={`${
+                  row.status === 'CONFIRMADO'
+                    ? 'bg-[#F2FFFD]'
+                    : row.status === 'RECUSADO'
+                    ? 'bg-[#FFF3F3]'
+                    : 'bg-white'
+                }`}>
                 {headers.map((header) => (
                   <td key={header.key} className="px-4 py-2 border-b">{row[header.key]}</td>
                 ))}

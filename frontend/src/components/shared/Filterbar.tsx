@@ -22,7 +22,7 @@ export default function FilterBar({
   return (
     <div className="flex flex-col md:flex-row items-start gap-4 mb-6">
       <CustomInput
-        placeholder="Nome, CPF ou Email"
+        placeholder="Filtre por nome"
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
       />
@@ -34,7 +34,7 @@ export default function FilterBar({
       />
 
       <MainButton
-        className="md:ml-auto w-full md:max-w-xs font-montserrat"
+        className="md:ml-auto w-full md:max-w-3xs font-montserrat"
         onClick={onActionClick}
       >
         {role === 'admin' ? 'Ajustes de agendamento' : 'Novo agendamento'}

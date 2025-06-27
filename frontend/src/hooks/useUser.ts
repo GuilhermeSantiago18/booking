@@ -1,18 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/services/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchUser, updateUser } from '@/services/users';
 import { IUserFormData } from '@/types/User';
-
-async function fetchUser(): Promise<IUserFormData> {
-  const response = await api.get('/users/me'); 
-  return response.data;
-}
+import toast from 'react-hot-toast';
 
 export function useUser() {
-  return useQuery<IUserFormData>({
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, error } = useQuery<IUserFormData>({
     queryKey: ['user'],
     queryFn: fetchUser,
     staleTime: 1000 * 60 * 30,
-    retry: 1, 
-    refetchOnWindowFocus: false
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
+
+  const updateMutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: (data) => {
+      toast.success('Perfil atualizado com sucesso!');
+      queryClient.invalidateQueries({ queryKey: ['user'] }); 
+    },
+  });
+
+  return {
+    user: data,
+    isLoading,
+    error,
+    updateUser: updateMutation,
+  }
 }

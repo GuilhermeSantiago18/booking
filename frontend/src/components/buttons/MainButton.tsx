@@ -14,7 +14,7 @@ export default function MainButton({ children, className = '', disabled, ...prop
 
   return (
     <button
-      className={`${baseClasses} ${disabled ? disabledClasses : enabledClasses} ${className}`}
+      className={`${baseClasses} ${disabled ? disabledClasses : enabledClasses} ${className} cursor-pointer`}
       disabled={disabled}
       {...props}
     >

@@ -1,6 +1,7 @@
 const CustomError = require('../errors/CustomError');
 const Appointment = require('../models/Appointment');
 const Room = require('../models/Room');
+const User = require('../models/User');
 
 async function createAppointment(userId, { date, time, room }) {
   if (!date || !time || !room) {
@@ -34,10 +35,70 @@ async function createAppointment(userId, { date, time, room }) {
 
 
 async function getAll() {
-  return await Appointment.findAll();
+  return await Appointment.findAll({
+    include: [
+      {
+        model: User,
+        attributes: ['firstName', 'lastName'],
+      },
+      {
+        model: Room,
+        attributes: ['name'],
+      }
+    ],
+  });
 }
+
+async function getAllByUser(userId) {
+   return await Appointment.findAll({
+    where: { user_id: userId },
+    include: [
+      { model: User, attributes: ['firstName', 'lastName'] },
+      { model: Room, attributes: ['name'] },
+    ],
+    order: [['createdAt', 'DESC']],
+  });
+}
+
+async function deleteAppointment(userId, appointmentId, userRole) {
+  const appointment = await Appointment.findByPk(appointmentId);
+  if (!appointment) {
+    throw new CustomError('Agendamento não encontrado', 404);
+  }
+
+  if (userRole === 'client' && appointment.user_id !== userId) {
+    throw new CustomError('Não autorizado a cancelar este agendamento', 403);
+  }
+
+  await Appointment.destroy({ where: { id: appointmentId } });
+}
+
+async function updateStatusAppointment(appointmentId, userRole, status) {
+  if (userRole !== 'admin') {
+    const error = new Error('Acesso negado: apenas admins podem confirmar agendamentos', 401);
+    error.status = 403;
+    throw error;
+  }
+
+  const appointment = await Appointment.findByPk(appointmentId);
+
+  if (!appointment) {
+    throw new CustomError('Agendamento não encontrado', 404);
+
+  }
+
+  appointment.status = status;
+  await appointment.save();
+}
+
+
+
+
 
 module.exports = {
   createAppointment,
-  getAll
+  getAll,
+  getAllByUser,
+  deleteAppointment,
+  updateStatusAppointment
 };

@@ -5,7 +5,7 @@ import Sidebar from '@/components/sidebar/Sidebar';
 import { useUser } from '@/hooks/useUser';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: user, isLoading } = useUser();
+  const { user, isLoading } = useUser();
 
 
   if (isLoading) return <Loading />

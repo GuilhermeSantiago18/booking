@@ -1,4 +1,4 @@
-import { useRooms } from '@/hooks/useRoom';
+import { useRooms } from '@/hooks/useRooms';
 import ClientForm from './ClientForm';
 import AdminForm from './AdminForm';
 import MainButton from '@/components/buttons/MainButton';
