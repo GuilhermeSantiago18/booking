@@ -14,7 +14,7 @@ export function useLogs() {
 
 
   return {
-    user: data,
+    logs: data,
     isLoading,
     error,
   }

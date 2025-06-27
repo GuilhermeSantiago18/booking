@@ -9,3 +9,15 @@ export interface ILogs {
   updatedAt: Date
 
 }
+
+
+
+
+export interface ILogRowTable {
+  id: number;
+  client: string;
+  type: string;
+  module: string;
+  dateTime: string;
+}
+

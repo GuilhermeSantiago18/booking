@@ -1,17 +1,85 @@
-'use client'
+'use client';
 
-import FilterBar from "@/components/shared/Filterbar"
-import { IRole } from "@/types/User";
 import { useState } from "react";
+import FilterBar from "@/components/shared/Filterbar";
+import Table from "@/components/table/Table";
+import Loading from "@/components/Loading";
+import { useUser } from "@/hooks/useUser";
+import { useLogs } from "@/hooks/useLogs";
+import { IRole } from "@/types/User";
+import { ILogRowTable } from "@/types/Logs";
 
 export default function Logs() {
-    const [search, setSearch] = useState('');
-    const [date, setDate] = useState('');
-    return (
-     <FilterBar
-            search={search}
-            onSearchChange={setSearch}
-            date={date}
-            onDateChange={setDate} role={IRole.ADMIN}        />
-    )
+  const { user } = useUser();
+  const { logs, isLoading, error } = useLogs();
+
+  const [search, setSearch] = useState('');
+  const [date, setDate] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+  if (!user) return null;
+
+  const isAdmin = user.role === IRole.ADMIN;
+
+  const filteredLogs = (logs ?? []).filter(log => {
+    const fullName = `${log.user.firstName} ${log.user.lastName}`.toLowerCase();
+    const searchMatch = fullName.includes(search.toLowerCase());
+    const dateMatch = date
+      ? new Date(log.createdAt).toISOString().slice(0, 10) === date
+      : true;
+    return searchMatch && dateMatch;
+  });
+
+  const mappedData: ILogRowTable[] = filteredLogs.map(log => ({
+    id: log.id,
+    client: `${log.user.firstName} ${log.user.lastName}`,
+    type: log.type,
+    module: log.module,
+    dateTime: `${new Date(log.createdAt).toLocaleDateString()} às ${new Date(log.createdAt).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    })}`,
+  }));
+
+  const sortedData = [...mappedData].sort((a, b) => {
+    const dateA = new Date(filteredLogs.find(log => log.id === a.id)!.createdAt).getTime();
+    const dateB = new Date(filteredLogs.find(log => log.id === b.id)!.createdAt).getTime();
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+  });
+
+  const handleSortClick = () => {
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  };
+
+  return (
+    <>
+      <FilterBar
+        search={search}
+        onSearchChange={setSearch}
+        date={date}
+        onDateChange={setDate}
+        role={user.role}
+      />
+
+      {isLoading && <Loading />}
+      {error && <p>Erro ao carregar logs.</p>}
+
+      <Table<ILogRowTable>
+        headers={[
+          ...(isAdmin ? [{ label: 'Cliente', key: 'client' as keyof ILogRowTable }] : []),
+          { label: 'Tipo de atividade', key: 'type' as keyof ILogRowTable },
+          { label: 'Módulo', key: 'module' as keyof ILogRowTable },
+          {
+            label: (
+              <button onClick={handleSortClick} className="hover:underline">
+                Data {sortOrder === 'asc' ? '↑' : '↓'}
+              </button>
+            ),
+            key: 'dateTime' as keyof ILogRowTable,
+          },
+        ]}
+        data={sortedData}
+      />
+    </>
+  );
 }
