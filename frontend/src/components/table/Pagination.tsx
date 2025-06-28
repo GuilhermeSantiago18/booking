@@ -35,7 +35,7 @@ export default function Pagination({
         disabled={currentPage === totalPages}
         className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50 cursor-pointer"
       >
-              <MoveRight size={16} />
+      <MoveRight size={16} />
       </button>
     </div>
   );

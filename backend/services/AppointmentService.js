@@ -40,7 +40,7 @@ async function getAll() {
     include: [
       {
         model: User,
-        attributes: ['firstName', 'lastName'],
+        attributes: ['firstName', 'lastName', 'role'],
       },
       {
         model: Room,
@@ -54,7 +54,7 @@ async function getAllByUser(userId) {
    return await Appointment.findAll({
     where: { user_id: userId },
     include: [
-      { model: User, attributes: ['firstName', 'lastName'] },
+      { model: User, attributes: ['firstName', 'lastName', 'role'] },
       { model: Room, attributes: ['name'] },
     ],
     order: [['createdAt', 'DESC']],

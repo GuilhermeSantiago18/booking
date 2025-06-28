@@ -38,7 +38,12 @@ export default function Logs() {
 
   const mappedData: ILogRowTable[] = filteredLogs.map(log => ({
     id: log.id,
-    client: `${log.user.firstName} ${log.user.lastName}`,
+   client: (
+    <>
+      {log.user.firstName} {log.user.lastName}{' '}
+      <span className="text-xs text-gray-400">({log.user.role})</span>
+    </>
+  ),
     type: log.type,
     module: log.module,
     dateTime: formatDateWithTime(log.createdAt),
