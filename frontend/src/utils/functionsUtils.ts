@@ -12,7 +12,7 @@ export function formatDateWithTime(date: string | Date): string {
 }
 
 
-export function getPlaceholder(role: string, showButton: boolean, area: 'logs' | 'agendamentos' | 'clientes'): string {
+export function getPlaceholder(role: string, showButton: boolean, area: 'logs' | 'agendamentos' | 'clientes' | 'salas'): string {
 
   if (area === 'agendamentos') return "Filtre por nome, sala ou status";
   if (role === 'admin') {

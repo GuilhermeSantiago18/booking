@@ -9,13 +9,16 @@ import { IRole } from '@/types/User';
 import { formatDateWithTime } from '@/utils/functionsUtils';
 import { useState } from 'react';
 import { ArrowDown, ArrowUp } from 'lucide-react';
+import { IRoom } from '@/types/Room';
+import ModalCreateRoom from '@/components/modals/modalSala/ModalCreateRoom';
 
 export default function Salas() {
-  const { rooms, isLoading, error } = useRooms();
+  const { rooms, isLoading, error, createRoom } = useRooms();
   const { user } = useUser();
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [currentPage, setCurrentPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (isLoading) return <Loading />;
   if (error) return <p>Erro ao carregar salas.</p>;
@@ -36,24 +39,42 @@ export default function Salas() {
     id: room.id,
     createdAt: formatDateWithTime(room.createdAt),
     name: room.name,
-    capacity: room.capacity,
-    description: room.description,
+    startTime: room.startTime,
+    endTime: room.endTime,
+    slotDurationMinutes: room.slotDurationMinutes,
   }));
 
   const handleSortClick = () => {
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
+
+  const handleActionClick = () => {
+    setIsModalOpen(true);
+  };
+
+
+  const handleConfirmModalRoom = async (data: IRoom) => {
+      try {
+        await createRoom.mutateAsync(data)
+        setIsModalOpen(false);
+      }
+      catch(error) {
+          console.error(error, 'Create Room')
+      }
+    };
+
   return (
     <>
       <FilterBar
-        screen="salas"
-        search={search}
-        onSearchChange={setSearch}
-        showDateFilter={false}
-        role={user?.role}
-        showButton={true}
-      />
+              screen="salas"
+              search={search}
+              onSearchChange={setSearch}
+              role={user?.role}
+              onActionClick={handleActionClick}
+              showButton={true} date={''} onDateChange={function (value: string): void {
+                  throw new Error('Function not implemented.');
+              } }      />
 
       <Table
         onPageChange={setCurrentPage}
@@ -73,11 +94,18 @@ export default function Salas() {
             key: 'createdAt',
           },
           { label: 'Nome', key: 'name' },
-        //   { label: 'Capacidade máxima', key: 'capacity' },
-          { label: 'Descrição', key: 'description' },
+          { label: 'Horário de início', key: 'startTime' },
+          { label: 'Horário de término', key: 'endTime' },
+          { label: 'Intervalo de tempo', key: 'slotDurationMinutes' },
         ]}
         data={mappedData}
       />
+      <ModalCreateRoom
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmModalRoom}
+/>
     </>
   );
 }
+
