@@ -1,5 +1,6 @@
 'use client';
 
+import { MoveLeft, MoveRight } from 'lucide-react';
 import React from 'react';
 
 interface PaginationProps {
@@ -20,31 +21,21 @@ export default function Pagination({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50"
+        className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50 cursor-pointer"
       >
-        Anterior
+        <MoveLeft size={16} />
       </button>
 
-      {Array.from({ length: totalPages }, (_, i) => (
-        <button
-          key={i}
-          onClick={() => onPageChange(i + 1)}
-          className={`px-3 py-1 text-sm rounded border ${
-            i + 1 === currentPage
-              ? 'bg-black text-white border-black'
-              : 'border-gray-300'
-          }`}
-        >
-          {i + 1}
-        </button>
-      ))}
+      <span className="px-4 py-1 text-sm rounded border border-black bg-black text-white">
+      {currentPage}
+      </span>
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50"
+        className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50 cursor-pointer"
       >
-        Próximo
+      <MoveRight size={16} />
       </button>
     </div>
   );

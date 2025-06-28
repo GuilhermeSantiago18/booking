@@ -43,13 +43,13 @@ async function deleteAppointment(req, res, next) {
 
 async function updateStatusAppointment(req, res, next) {
   try {
-    const userRole = req.user.role;
+    const user_id = req.user.id;
     const { id } = req.params;
     const {status} = req.body
 
     console.log(status)
 
-    await AppointmentService.updateStatusAppointment(id, userRole, status);
+    await AppointmentService.updateStatusAppointment(user_id, id, status);
     return res.status(204).send();
   } catch (err) {
     next(err);

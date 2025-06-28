@@ -109,14 +109,14 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
             <CircleCheck className="hover:text-green-600 cursor-pointer" />
           </button>
           <button onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
-            <CircleX className="hover:text-red-600 cursor-pointer" />
+            <CircleX className="hover:text-red-400 cursor-pointer" />
           </button>
         </div>
       );
     }
      if (row.status === AppointmentStatus.CONFIRMADO) {
     return (
-      <button className="cursor-pointer flex hover:text-red-600 ml-3" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+      <button className="cursor-pointer flex hover:text-red-400 ml-3" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
         <XCircle />
       </button>
     );
@@ -125,7 +125,7 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
 
   if (user?.canSchedule && (row.status === AppointmentStatus.PENDENTE || row.status === AppointmentStatus.CONFIRMADO)) {
     return (
-      <button className="cursor-pointer flex justify-start hover:text-red-600" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+      <button className="cursor-pointer flex justify-start hover:text-red-400" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
         <XCircle />
       </button>
     );

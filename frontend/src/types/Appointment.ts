@@ -1,3 +1,5 @@
+import { IRole } from "./User";
+
 export interface ICreateAppointmentData {
   date: string;
   time: string;
@@ -24,6 +26,7 @@ export interface IAppointment {
   time: string;
   status: AppointmentStatus
   User: {
+    role: IRole;
     firstName: string;
     lastName: string;
   };

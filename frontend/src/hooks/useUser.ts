@@ -18,7 +18,8 @@ export function useUser() {
     mutationFn: updateUser,
     onSuccess: () => {
       toast.success('Perfil atualizado com sucesso!');
-      queryClient.invalidateQueries({ queryKey: ['user'] }); 
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: ['logs'] }); 
     },
   });
 

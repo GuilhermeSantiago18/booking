@@ -2,6 +2,7 @@ const CustomError = require('../errors/CustomError');
 const Appointment = require('../models/Appointment');
 const Room = require('../models/Room');
 const User = require('../models/User');
+const { logActionManual } = require('./LogAction');
 
 async function createAppointment(userId, { date, time, room }) {
   if (!date || !time || !room) {
@@ -39,7 +40,7 @@ async function getAll() {
     include: [
       {
         model: User,
-        attributes: ['firstName', 'lastName'],
+        attributes: ['firstName', 'lastName', 'role'],
       },
       {
         model: Room,
@@ -53,7 +54,7 @@ async function getAllByUser(userId) {
    return await Appointment.findAll({
     where: { user_id: userId },
     include: [
-      { model: User, attributes: ['firstName', 'lastName'] },
+      { model: User, attributes: ['firstName', 'lastName', 'role'] },
       { model: Room, attributes: ['name'] },
     ],
     order: [['createdAt', 'DESC']],
@@ -73,18 +74,27 @@ async function deleteAppointment(userId, appointmentId, userRole) {
   await Appointment.destroy({ where: { id: appointmentId } });
 }
 
-async function updateStatusAppointment(appointmentId, userRole, status) {
-  if (userRole !== 'admin') {
-    const error = new Error('Acesso negado: apenas admins podem confirmar agendamentos', 401);
-    error.status = 403;
-    throw error;
-  }
-
+async function updateStatusAppointment(userId, appointmentId, status) {
   const appointment = await Appointment.findByPk(appointmentId);
-
   if (!appointment) {
     throw new CustomError('Agendamento não encontrado', 404);
+  }
 
+
+  if (status === 'RECUSADO') {
+    await logActionManual({
+      user_id: userId,
+      type: 'Cancelamento de agendamento',
+      module: 'Agendamento',
+    });
+  }
+
+  else if (status === 'CONFIRMADO') {
+    await logActionManual({
+      user_id: userId,
+      type: 'Confirmação de agendamento',
+      module: 'Agendamento',
+    });
   }
 
   appointment.status = status;
