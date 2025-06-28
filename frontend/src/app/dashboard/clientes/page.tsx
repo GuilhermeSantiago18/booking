@@ -8,6 +8,7 @@ import { useState } from "react";
 import { IRole } from "@/types/User";
 import { ArrowDown, ArrowUp, Check, CheckCircle, ToggleLeft, ToggleRight, X, XCircle } from "lucide-react";
 import { IClientRow } from "@/types/Client";
+import { formatDateWithTime } from "@/utils/functionsUtils";
 
 
 export default function Client() {
@@ -34,7 +35,7 @@ export default function Client() {
 
   const mappedData: IClientRow[] = sortedClients.map(client => ({
   id: client.id,
-  createdAt: new Date(client.createdAt).toLocaleDateString('pt-BR'),
+  createdAt: formatDateWithTime(client.createdAt),
   nome: `${client.firstName} ${client.lastName}`,
   endereco: `${client.street}, ${client.number || 'S/N'} - ${client.district}, ${client.city} - ${client.state}`,
   canSchedule: client.canSchedule,
