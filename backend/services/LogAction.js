@@ -7,7 +7,13 @@ function logActionMiddleware({ type, module }) {
         const userId = req.user?.id;
         if (!userId) return;
 
-        await LogService.createLog({ user_id: userId, type, module });
+        const isError = res.statusCode >= 400;
+
+        await LogService.createLog({
+          user_id: userId,
+          type: isError ? `Erro ao tentar ${type.toLowerCase()}` : type,
+          module,
+        });
       } catch (error) {
         console.error('Erro ao criar log (middleware):', error);
       }
@@ -16,6 +22,7 @@ function logActionMiddleware({ type, module }) {
     next();
   };
 }
+
 
 async function logActionManual({ user_id, type, module }) {
   try {
