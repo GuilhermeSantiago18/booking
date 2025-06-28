@@ -24,6 +24,10 @@ async function registerClient(data) {
   const userExists = await User.findOne({ where: { email } });
   if (userExists) throw new CustomError('Email already registered', 409);
 
+  if (password.length < 6) {
+  throw new CustomError('A senha deve ter pelo menos 6 caracteres', 400);
+}
+
   const { street, district, city, state, cep } =
     await fetchAddressByCep(postalCode);
 
