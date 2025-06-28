@@ -12,7 +12,7 @@ interface FilterBarProps {
   role: IRole;
   showButton: boolean
   onActionClick?: () => void;
-  screen: "logs" | "agendamentos" | "clientes"
+  screen: "logs" | "agendamentos" | "clientes" | "salas"
 }
 
 

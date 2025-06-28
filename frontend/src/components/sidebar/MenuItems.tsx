@@ -1,4 +1,4 @@
-import { CalendarRange, Logs, User } from 'lucide-react';
+import { CalendarRange, LayoutTemplate, Logs, User } from 'lucide-react';
 
 export interface IMenuItem {
   href: string;
@@ -31,6 +31,12 @@ export const menuItems: IMenuItem[] = [
     href: '/dashboard/clientes',
     label: 'Clientes',
     icon: <User size={18} />,
+    roles: ['admin'],
+  },
+  {
+    href: '/dashboard/salas',
+    label: 'Salas',
+    icon: <LayoutTemplate size={18} />,
     roles: ['admin'],
   },
 ];
