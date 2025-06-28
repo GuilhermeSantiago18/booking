@@ -20,6 +20,7 @@ export function useRooms() {
       toast.success(`Sala "${variables.name}" atualizada com sucesso!`);
       queryClient.invalidateQueries({ queryKey: ['rooms'] });
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['logs'] });
     },
   });
 
