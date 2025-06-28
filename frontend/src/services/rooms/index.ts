@@ -10,3 +10,8 @@ export async function getAllRooms(): Promise<IRoom[]> {
 export async function updateRoom(data: IRoom): Promise<void> {
   await api.put(`/rooms/${data.roomId}`, data);
 }
+
+
+export async function createRoom(data: IRoom): Promise<void> {
+  await api.post(`/rooms`, data);
+}

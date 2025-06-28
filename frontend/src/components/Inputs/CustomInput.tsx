@@ -41,6 +41,7 @@ export default function CustomInput({
       <div className="relative">
         <input
           {...props}
+          value={props.value ?? ''}
           type={inputType}
           className={`w-full border border-gray-300 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-black font-montserrat text-sm leading-5 mb-4 ${inputClassName}`}
         />
