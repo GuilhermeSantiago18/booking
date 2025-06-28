@@ -16,7 +16,7 @@ interface TableProps<T> {
   getRowClassName?: (row: T) => string;
   currentPage?: number;
   itemsPerPage?: number;
-  onPageChange?: (page: number) => void;
+  onPageChange: (page: number) => void;
 }
 
 export default function Table<T>({
@@ -50,53 +50,63 @@ export default function Table<T>({
   const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat text-sm">
-      <table className="min-w-full table-auto mt-4">
-        <thead className="bg-white">
-          <tr>
-            {headers.map((header, index) => (
-              <th key={String(index)} className="text-left px-4 py-2 border-b border-gray-300">
-                {header.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.map((row, idx) => (
-            <tr
-              key={idx}
-              className={getRowClassName ? getRowClassName(row) : 'bg-white'}
-            >
-              {headers.map((header) => {
-                const cellContent = row[header.key as keyof T];
-                if (header.key === 'actions') {
+    <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat text-sm md:min-h-[calc(100vh-300px)] flex flex-col justify-between">
+      <div className="flex-grow">
+        <table className="min-w-full table-auto mt-4">
+          <thead className="bg-white">
+            <tr>
+              {headers.map((header, index) => (
+                <th
+                  key={String(index)}
+                  className="text-left px-4 py-2 border-b border-gray-300"
+                >
+                  {header.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedData.map((row, idx) => (
+              <tr
+                key={idx}
+                className={getRowClassName ? getRowClassName(row) : 'bg-white'}
+              >
+                {headers.map((header) => {
+                  const cellContent = row[header.key as keyof T];
+                  if (header.key === 'actions') {
+                    return (
+                      <td
+                        key="actions"
+                        className="px-4 py-3 text-center border-b border-gray-300"
+                      >
+                        {renderActions?.(row)}
+                      </td>
+                    );
+                  }
+
                   return (
                     <td
-                      key="actions"
-                      className="px-4 py-3 text-center border-b border-gray-300"
+                      key={String(header.key)}
+                      className="px-4 py-3 border-b border-gray-300"
                     >
-                      {renderActions?.(row)}
+                      {React.isValidElement(cellContent)
+                        ? cellContent
+                        : String(cellContent ?? '')}
                     </td>
                   );
-                }
-
-                return (
-                  <td key={String(header.key)} className="px-4 py-3 border-b border-gray-300">
-                    {React.isValidElement(cellContent)
-                      ? cellContent
-                      : String(cellContent ?? '')}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-     <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-/>
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ export default function Client() {
   const {user} = useUser()
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   if (isLoading) return <Loading />;
@@ -99,6 +100,8 @@ export default function Client() {
       />
 
       <Table<IClientRow>
+        onPageChange={setCurrentPage}
+        currentPage={currentPage}
         headers={[
           {
             label: (
@@ -120,7 +123,6 @@ export default function Client() {
           { label: 'Status', key: 'status' },
         ]}
         data={mappedData}
-  
       />
     </>
   );
