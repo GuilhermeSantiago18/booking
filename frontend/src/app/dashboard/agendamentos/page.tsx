@@ -4,7 +4,7 @@ import FilterBar from "@/components/shared/Filterbar";
 import Table, { Column } from "@/components/table/Table";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
-import ModalAgendamento from "@/components/modals/ModalAgendamento";
+import ModalAgendamento from "@/components/modals/modalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
