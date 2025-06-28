@@ -19,6 +19,7 @@ export default function Agendamentos() {
   const { user } = useUser();
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -152,6 +153,7 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
       {error && <p>Erro ao carregar agendamentos.</p>}
      
       <Table<IAppointmentRow>
+        onPageChange={setCurrentPage}
   headers={[
     {
       label: (

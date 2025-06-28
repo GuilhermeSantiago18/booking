@@ -17,6 +17,7 @@ export default function Logs() {
 
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   if (!user || !user.canViewLogs) return <p className="font-montserrat">Não é possível carregar Logs.</p>
@@ -99,6 +100,7 @@ const headers = isAdmin
       {error && <p>Erro ao carregar logs.</p>}
 
    <Table<ILogRowTable>
+        onPageChange={setCurrentPage}
         headers={headers}
         data={sortedData}
         />
