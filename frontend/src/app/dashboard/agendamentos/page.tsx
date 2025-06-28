@@ -8,7 +8,7 @@ import ModalAgendamento from "@/components/modals/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
-import { ArrowDown, ArrowUp, CircleCheck, CircleX, X } from "lucide-react";
+import { ArrowDown, ArrowUp, CircleCheck, CircleX, X, XCircle } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
@@ -111,24 +111,19 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
         </div>
       );
     }
-
-    if (row.status === AppointmentStatus.CONFIRMADO) {
-      return (
-        <div className="flex gap-2 justify-center">
-          <button onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
-            <X className="hover:text-red-600" />
-          </button>
-        </div>
-      );
-    }
-
-    return null;
+     if (row.status === AppointmentStatus.CONFIRMADO) {
+    return (
+      <button className="cursor-pointer flex hover:text-red-600 ml-3" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+        <XCircle />
+      </button>
+    );
+  }
   }
 
-  if (userRole === "client" && row.status === AppointmentStatus.PENDENTE) {
+  if (user?.canSchedule && (row.status === AppointmentStatus.PENDENTE || row.status === AppointmentStatus.CONFIRMADO)) {
     return (
-      <button className="cursor-pointer ml-4 md:ml-8 hover:text-red-600" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
-        <X />
+      <button className="cursor-pointer flex justify-start hover:text-red-600" onClick={() => handleClick(AppointmentStatus.RECUSADO)}>
+        <XCircle />
       </button>
     );
   }
@@ -144,7 +139,7 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
   return (
     <>
       <FilterBar
-        showButton={user.canSchedule}
+        showButton={true}
         search={search}
         onSearchChange={setSearch}
         date={date}
