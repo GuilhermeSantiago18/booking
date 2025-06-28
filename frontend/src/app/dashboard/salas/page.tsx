@@ -11,11 +11,13 @@ import { useState } from 'react';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { IRoom } from '@/types/Room';
 import ModalCreateRoom from '@/components/modals/modalSala/ModalCreateRoom';
+import { genericFilter } from '@/utils/genericFilterForInput';
 
 export default function Salas() {
   const { rooms, isLoading, error, createRoom } = useRooms();
   const { user } = useUser();
   const [search, setSearch] = useState('');
+  const [date, setDate] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [currentPage, setCurrentPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,9 +27,13 @@ export default function Salas() {
   if (!user) return null;
   if (user.role !== IRole.ADMIN) return null;
 
-  const filteredRooms = (rooms ?? []).filter(room =>
-    room.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredRooms = genericFilter({
+    data: rooms ?? [],
+    search,
+    searchKeys: ['name'],
+    dateKey: 'createdAt',
+    dateValue: date,
+  });
 
   const sortedRooms = [...filteredRooms].sort((a, b) => {
     const dateA = new Date(a.createdAt).getTime();
@@ -72,9 +78,11 @@ export default function Salas() {
               onSearchChange={setSearch}
               role={user?.role}
               onActionClick={handleActionClick}
-              showButton={true} date={''} onDateChange={function (value: string): void {
-                  throw new Error('Function not implemented.');
-              } }      />
+              showButton={true}
+              date={date}
+            onDateChange={setDate}
+
+             />
 
       <Table
         onPageChange={setCurrentPage}
