@@ -7,7 +7,6 @@ import MainButton from '../buttons/MainButton';
 import CustomInput from '../Inputs/CustomInput';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
-import { AxiosError } from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function LoginForm() {

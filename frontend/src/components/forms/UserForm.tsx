@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CustomInput from '../Inputs/CustomInput';
 import MainButton from '../buttons/MainButton';
 import { checkCep } from '@/services/checkCep';
 import Loading from '../Loading';
-import toast from 'react-hot-toast';
+
 import { useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { IUserFormData } from '@/types/User';
+
 
 interface Address {
   street: string;
@@ -18,18 +19,18 @@ interface Address {
 
 interface UserFormProps {
   mode: 'register' | 'edit';
-  initialData?: any;
+  initialData: IUserFormData;
   onSubmit: (data: any) => Promise<void>;
 }
 
 
-export default function UserForm({ mode, initialData = {}, onSubmit }: UserFormProps) {
+export default function UserForm({ mode, initialData, onSubmit }: UserFormProps) {
   const queryClient = useQueryClient();
   const [firstName, setFirstName] = useState(initialData.firstName || '');
   const [lastName, setLastName] = useState(initialData.lastName || '');
   const [email, setEmail] = useState(initialData.email || '');
   const [password, setPassword] = useState('');
-  const [postalCode, setPostalCode] = useState(initialData.cep || '');
+  const [postalCode, setPostalCode] = useState(initialData.postalCode || '');
   const [address, setAddress] = useState<Address>({
     street: initialData.street || '',
     city: initialData.city || '',

@@ -16,7 +16,7 @@ export function useUser() {
 
   const updateMutation = useMutation({
     mutationFn: updateUser,
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Perfil atualizado com sucesso!');
       queryClient.invalidateQueries({ queryKey: ['user'] }); 
     },
