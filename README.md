@@ -35,8 +35,8 @@ Sistema completo com backend em **Node.js + Express + Sequelize** e frontend em 
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repo.git
-cd seu-repo
+git clone git@github.com:GuilhermeSantiago18/booking.git
+cd booking
 ```
 
 ---
