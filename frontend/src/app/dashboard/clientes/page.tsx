@@ -77,7 +77,7 @@ export default function Client() {
       <CheckCircle size={20} className="text-green-600 ml-4" /> 
       </button>
     : <button onClick={() => updateClient.mutate({ id: client.id, data: { status: !client.status } })}>
-      <XCircle size={20} className="text-red-600 ml-4 cursor-pointer" /> 
+      <XCircle size={20} className="text-red-400 ml-4 cursor-pointer" /> 
       </button>
 }));
 
