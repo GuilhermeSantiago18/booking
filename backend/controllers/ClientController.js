@@ -12,7 +12,7 @@ async function getAll(req, res, next) {
 
 async function updateClient(req, res, next) {
   try {
-    const client = await ClientService.updateClient(req.params.id, req.body);
+    const client = await ClientService.updateClient(req.params.id, req.body, req.user.id);
     res.json(client);
   } catch (error) {
     next(error);

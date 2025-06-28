@@ -18,6 +18,32 @@ async function listLogs(req, res, next) {
   }
 }
 
+
+async function deleteLog(req, res, next) {
+  try {
+;
+
+   const deleteLog = await LogService.deleteLog(req.params.id);
+    res.json(deleteLog);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+async function createLog(req, res, next) {
+  try {
+    const {type, module} = req.body
+    const {id} = req.user
+    console.log("id,", id)
+   const logCreated = await LogService.createLog({user_id: id, type, module });
+    res.json(logCreated);
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
+  deleteLog,
   listLogs,
+  createLog
 };
