@@ -11,6 +11,11 @@ export interface ILogs {
 }
 
 
+export interface ICreateLog {
+  type: string,
+  module: string
+}
+
 
 
 export interface ILogRowTable {

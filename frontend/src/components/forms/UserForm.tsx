@@ -7,7 +7,7 @@ import { checkCep } from '@/services/checkCep';
 import Loading from '../Loading';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { IUserFormData } from '@/types/User';
+import { IRole, IUserFormData } from '@/types/User';
 
 
 interface Address {
@@ -20,7 +20,7 @@ interface Address {
 interface UserFormProps {
   mode: 'register' | 'edit';
   initialData: IUserFormData;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: IUserFormData) => Promise<void>;
 }
 
 
@@ -86,7 +86,10 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
       ...address,
       number,
       complement,
-      role: 'client',
+      role: IRole.CLIENT,
+      canViewLogs: true,
+      canSchedule: true,
+      status: true
     };
 
      queryClient.setQueryData(['user'], payload);

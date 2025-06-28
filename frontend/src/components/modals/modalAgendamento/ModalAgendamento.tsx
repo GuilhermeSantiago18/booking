@@ -8,13 +8,13 @@ import { useEffect, useState } from 'react';
 interface ModalAgendamentoProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: any) => void;
+  onConfirm: (data: unknown) => void;
   role: 'client' | 'admin';
 }
 
 export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: ModalAgendamentoProps) {
   const { rooms, isLoading, error } = useRooms();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<unknown>();
 
   useEffect(() => {
     if (isOpen) {

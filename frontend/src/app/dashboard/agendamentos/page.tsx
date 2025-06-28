@@ -4,11 +4,11 @@ import FilterBar from "@/components/shared/Filterbar";
 import Table, { Column } from "@/components/table/Table";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
-import ModalAgendamento from "@/components/modals/ModalAgendamento";
+import ModalAgendamento from "@/components/modals/modalAgendamento/ModalAgendamento";
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
-import { ArrowDown, ArrowUp, CircleCheck, CircleX, X, XCircle } from "lucide-react";
+import { ArrowDown, ArrowUp, CircleCheck, CircleX, XCircle } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
@@ -199,7 +199,12 @@ const renderActions = (row: IAppointmentRow) =>
       <ModalAgendamento
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={isClient ? handleConfirmModal : handleUpdateRoom}
+        onConfirm={
+          (isClient
+            ? handleConfirmModal
+            : handleUpdateRoom) as (data: unknown) => void | Promise<void>
+        }
+
         role={user.role}
       />
     </>

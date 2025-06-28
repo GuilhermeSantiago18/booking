@@ -17,6 +17,7 @@ export function useAppointments() {
     onSuccess: () => {
       toast.success('Agendamento criado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['logs'] });
     },
   });
 
@@ -25,6 +26,7 @@ export function useAppointments() {
     onSuccess: () => {
       toast.success('Agendamento cancelado!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['logs'] });
     },
   });
 
@@ -33,6 +35,7 @@ export function useAppointments() {
     onSuccess: (_, variables) => {
       toast.success(`Agendamento ${variables.status.toLowerCase()}!`);
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['logs'] });
     },
   });
 

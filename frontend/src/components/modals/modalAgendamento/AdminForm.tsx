@@ -4,7 +4,7 @@ import { IRoom } from '@/types/Room';
 
 interface AdminFormProps {
   rooms: IRoom[];
-  onChange: Dispatch<SetStateAction<any>>;
+  onChange: Dispatch<SetStateAction<unknown>>;
 }
 
 export default function AdminForm({ rooms, onChange }: AdminFormProps) {

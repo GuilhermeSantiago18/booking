@@ -1,4 +1,4 @@
-import { ICreateAppointmentData, IAppointment, Status } from '@/types/Appointment';
+import { ICreateAppointmentData, IAppointment } from '@/types/Appointment';
 import { api } from '../api';
 
 export async function getAllAppointments(): Promise<IAppointment[]> {
@@ -15,7 +15,7 @@ export async function cancelAppointment(id: number): Promise<void> {
   await api.delete(`/appointments/${id}`);
 }
 
-export async function updateStatusAppointment({id,status}: {id: number; status: Status}): Promise<void> {
+export async function updateStatusAppointment({id,status}: {id: number; status: string}): Promise<void> {
   await api.patch(`/appointments/${id}`, { status });
 }
 

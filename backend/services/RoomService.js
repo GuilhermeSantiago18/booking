@@ -1,5 +1,4 @@
 const Room = require('../models/Room');
-// const Booking = require('../models/Booking');
 const CustomError = require('../errors/CustomError');
 
 async function createRoom(data) {
