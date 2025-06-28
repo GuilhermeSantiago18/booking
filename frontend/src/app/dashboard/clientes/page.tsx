@@ -5,11 +5,11 @@ import Table from "@/components/table/Table";
 import Loading from "@/components/Loading";
 import { useCLients } from "@/hooks/useClients";
 import { useState } from "react";
-import { IRole } from "@/types/User";
 import { ArrowDown, ArrowUp, CheckCircle, XCircle } from "lucide-react";
 import { IClientRow } from "@/types/Client";
 import { formatDateWithTime } from "@/utils/functionsUtils";
 import { useUser } from "@/hooks/useUser";
+import { IRole } from "@/types/User";
 
 
 export default function Client() {
@@ -21,6 +21,12 @@ export default function Client() {
 
   if (isLoading) return <Loading />;
   if (error) return <p>Erro ao carregar clientes.</p>;
+
+  if (!user) return null;
+  
+    const { role } = user;
+  
+    if (role !== IRole.ADMIN && role !== IRole.CLIENT) return null;
 
   const filteredClients = (clients ?? []).filter((client) => {
     const fullName = `${client.firstName} ${client.lastName}`.toLowerCase();
@@ -86,7 +92,7 @@ export default function Client() {
         onSearchChange={setSearch}
         date={date}
         onDateChange={setDate}
-        role={IRole.CLIENT}
+        role={user?.role}
         showButton={false}
       />
 
