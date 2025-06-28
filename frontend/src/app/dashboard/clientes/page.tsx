@@ -37,7 +37,8 @@ export default function Client() {
   id: client.id,
   createdAt: formatDateWithTime(client.createdAt),
   nome: `${client.firstName} ${client.lastName}`,
-  endereco: `${client.street}, ${client.number || 'S/N'} - ${client.district}, ${client.city} - ${client.state}`,
+  endereco: `${client.city} - ${client.state}`,
+  email: client.email,
   canSchedule: client.canSchedule,
   canViewLogs: client.canViewLogs,
   permissoes: (
@@ -102,7 +103,8 @@ export default function Client() {
             key: 'createdAt',
           },
           { label: 'Nome', key: 'nome' },
-          { label: 'Endereço', key: 'endereco' },
+          { label: 'Email', key: 'email' },
+          { label: 'Cidade / Estado', key: 'endereco' },
           { label: 'Permissões', key: 'permissoes' },
           { label: 'Status', key: 'status' },
         ]}
