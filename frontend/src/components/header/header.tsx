@@ -42,14 +42,14 @@ export default function Header() {
   const targetRoute = pathname === '/login' ? '/register' : '/login';
 
   return (
-    <header className="flex justify-between items-center w-full p-6 bg-[#F6F4F1] border-b-2 border-gray-300">
+    <header className="flex justify-between items-center w-full p-6 bg-[#F6F4F1] border-b-2 border-gray-300 font-montserrat">
   <div className="flex items-center gap-4">
     <Image src="/assets/logo.svg" alt="Logo" width={60} height={60} />
     
     {metadata && (
       <div className="ml-0 md:ml-42">
-        <h1 className="text-2xl font-semibold font-montserrat">{metadata.title}</h1>
-        <p className="text-xs text-black font-medium font-montserrat">{metadata.description}</p>
+        <h1 className="text-2xl font-semibold">{metadata.title}</h1>
+        <p className="text-xs text-black font-medium">{metadata.description}</p>
       </div>
     )}
   </div>

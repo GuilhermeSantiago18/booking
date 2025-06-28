@@ -3,7 +3,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import MainButton from '@/components/buttons/MainButton';
 
-export default function LogoutButton() {
+interface LogoutButtonProps {
+  style?: string;
+}
+
+export default function LogoutButton(className: LogoutButtonProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -16,8 +20,8 @@ export default function LogoutButton() {
   };
 
   return (
-    <MainButton onClick={handleLogout}>
-      LOGOUT
+    <MainButton onClick={handleLogout} className={className.style}>
+      Logout
     </MainButton>
   );
 }

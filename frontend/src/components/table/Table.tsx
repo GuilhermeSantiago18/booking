@@ -39,7 +39,7 @@ export default function Table<T>({
   }
 
   return (
-    <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat">
+    <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat text-sm">
       <table className="min-w-full table-auto border">
         <thead className="bg-gray-100">
           <tr>

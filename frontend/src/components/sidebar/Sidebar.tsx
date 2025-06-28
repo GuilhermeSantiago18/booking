@@ -37,7 +37,7 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
       </div>
 
       <aside
-        className={`bg-gray-100 md:w-64 fixed transform top-0 md:top-auto min-h-screen ${
+        className={`bg-gray-100 md:w-64 fixed transform top-0 md:top-auto min-h-screen font-montserrat text-sm ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 transition-transform duration-200 ease-in-out z-40`}
       >
@@ -56,8 +56,8 @@ export default function Sidebar({ firstName, lastName, role }: IUser) {
               </Link>
             ))}
           </nav>
-          <LogoutButton />
-          <div className="text-sm text-gray-700 mt-8 border-t-2 border-gray-300 pt-4">            
+          <div className="text-sm text-gray-700 mt-8 border-t-2 border-gray-300 pt-4">   
+              <LogoutButton style='mb-8'/>         
             <button
               onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
               className="w-full flex justify-between items-center font-semibold focus:outline-none"
