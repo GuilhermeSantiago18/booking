@@ -52,7 +52,7 @@ export default function Salas() {
         onSearchChange={setSearch}
         showDateFilter={false}
         role={user?.role}
-        showButton={false}
+        showButton={true}
       />
 
       <Table
@@ -73,7 +73,7 @@ export default function Salas() {
             key: 'createdAt',
           },
           { label: 'Nome', key: 'name' },
-          { label: 'Capacidade', key: 'capacity' },
+        //   { label: 'Capacidade máxima', key: 'capacity' },
           { label: 'Descrição', key: 'description' },
         ]}
         data={mappedData}

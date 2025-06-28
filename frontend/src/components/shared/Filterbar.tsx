@@ -46,7 +46,7 @@ export default function FilterBar({
         className="md:ml-auto w-full md:max-w-3xs font-montserrat text-base"
         onClick={onActionClick}
       >
-        {role === 'admin' ? 'Ajustes de agendamento' : 'Novo agendamento'}
+        {screen === 'salas' ? 'Criar nova sala' : role === 'admin' ? 'Ajustes de agendamento' : 'Novo agendamento'}
       </MainButton>
       }
     </div>
