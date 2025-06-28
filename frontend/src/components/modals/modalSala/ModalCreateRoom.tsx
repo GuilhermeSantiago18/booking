@@ -45,10 +45,7 @@ export default function ModalCreateRoom({
   };
 
   const handleConfirm = () => {
-    if (formData.name && formData.description) {
       onConfirm(formData as IRoom);
-      onClose();
-    }
   };
 
   return (
