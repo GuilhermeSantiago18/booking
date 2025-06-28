@@ -1,4 +1,4 @@
-# 🏢 Sistema de Agendamento de Salas
+# 🏢 Sistema de Agendamento por Salas
 
 Sistema completo com backend em **Node.js + Express + Sequelize** e frontend em **Next.js (App Router)**, desenvolvido para gerenciar reservas de salas com autenticação, controle de permissões e logs de atividades.
 
