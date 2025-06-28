@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import DateInput from '@/components/Inputs/DateInput';
 import { IRoom } from '@/types/Room';
-import { generateTimeSlots } from '@/utils/generateTimeSlots'; // ou onde estiver
+import { generateTimeSlots } from '@/utils/generateTimeSlots';
 import { TODAY } from '@/constants';
 
 interface ClientFormProps {
   rooms: IRoom[];
-  onChange: Dispatch<SetStateAction<any>>;
+  onChange: Dispatch<SetStateAction<unknown>>;
 }
 
 export default function ClientForm({ rooms, onChange }: ClientFormProps) {

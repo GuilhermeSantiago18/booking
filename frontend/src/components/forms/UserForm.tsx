@@ -20,7 +20,7 @@ interface Address {
 interface UserFormProps {
   mode: 'register' | 'edit';
   initialData: IUserFormData;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: unknown) => Promise<void>;
 }
 
 

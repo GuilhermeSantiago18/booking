@@ -16,33 +16,37 @@ export function genericFilter<T>({
   return data.filter((item) => {
     const matchesSearch = search
       ? searchKeys.some((key) => {
-          const rawValue = String(key).includes('.') ? getNestedValue(item, String(key)) : (item as any)[key];
+          const rawValue = typeof key === 'string' && key.includes('.')
+            ? getNestedValue(item, key)
+            : item[key as keyof T];
 
           const value = String(rawValue ?? '').toLowerCase();
-
-          const searchLower = search.toLowerCase();
-
-          return value.includes(searchLower);
+          return value.includes(search.toLowerCase());
         })
       : true;
 
-    const matchesDate = dateKey && dateValue
-  ? normalizeDate((item as any)[dateKey]) === dateValue
-  : true;
-
+    const matchesDate =
+      dateKey && dateValue
+        ? normalizeDate(item[dateKey]) === dateValue
+        : true;
 
     return matchesSearch && matchesDate;
   });
 }
 
-function getNestedValue(obj: any, path: string): any {
-  return path.split('.').reduce((acc, key) => acc?.[key], obj);
+function getNestedValue(obj: unknown, path: string): unknown {
+  return path.split('.').reduce((acc: unknown, key) => {
+    if (acc && typeof acc === 'object' && key in acc) {
+      return (acc as Record<string, unknown>)[key];
+    }
+    return undefined;
+  }, obj);
 }
 
 
-function normalizeDate(date: any): string {
+function normalizeDate(date: unknown): string {
   if (!date) return '';
-  const d = new Date(date);
+  const d = new Date(date as string | number | Date);
   if (!isNaN(d.getTime())) {
     return d.toISOString().slice(0, 10);
   }

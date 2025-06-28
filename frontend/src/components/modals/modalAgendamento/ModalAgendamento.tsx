@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 interface ModalAgendamentoProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: any) => void;
+  onConfirm: (data: unknown) => void;
   role: 'client' | 'admin';
 }
 

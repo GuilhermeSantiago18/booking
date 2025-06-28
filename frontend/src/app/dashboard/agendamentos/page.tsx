@@ -8,7 +8,7 @@ import ModalAgendamento from "@/components/modals/modalAgendamento/ModalAgendame
 import { useAppointments } from "@/hooks/useAppointments";
 import Loading from "@/components/Loading";
 import { AppointmentStatus, IAppointmentRow, ICreateAppointmentData } from "@/types/Appointment";
-import { ArrowDown, ArrowUp, CircleCheck, CircleX, X, XCircle } from "lucide-react";
+import { ArrowDown, ArrowUp, CircleCheck, CircleX, XCircle } from "lucide-react";
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
