@@ -54,10 +54,11 @@ async function registerClient(data) {
 
 async function login({ email, password }) {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new CustomError('Invalid User or Password', 401);
+  if (!user.status) throw new CustomError('Usuário inativo. Contate o administrador.', 403)
+  if (!user) throw new CustomError('Usuário ou senha inválido', 401);
 
   const passwordValid = await bcryptjs.compare(password, user.password);
-  if (!passwordValid) throw new CustomError('Invalid User or Password', 401);
+  if (!passwordValid) throw new CustomError('Usuário ou senha inválido', 401);
 
   const token = generateToken({
     id: user.id,
