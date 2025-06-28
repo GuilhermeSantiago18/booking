@@ -196,9 +196,6 @@ const renderActions = (row: IAppointmentRow) =>
         getRowClassName={getRowClassName}
         renderActions={renderActions}
       />
-
-
-
       <ModalAgendamento
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

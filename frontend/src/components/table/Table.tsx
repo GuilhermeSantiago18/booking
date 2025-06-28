@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import React from 'react';
+import Pagination from './Pagination';
 
 export interface Column<T> {
   label: string | React.ReactNode;
@@ -50,11 +51,11 @@ export default function Table<T>({
 
   return (
     <div className="overflow-x-auto bg-white rounded shadow-md font-montserrat text-sm">
-      <table className="min-w-full table-auto border">
-        <thead className="bg-gray-100">
+      <table className="min-w-full table-auto mt-4">
+        <thead className="bg-white">
           <tr>
             {headers.map((header, index) => (
-              <th key={String(index)} className="text-left px-4 py-2 border-b">
+              <th key={String(index)} className="text-left px-4 py-2 border-b border-gray-300">
                 {header.label}
               </th>
             ))}
@@ -72,7 +73,7 @@ export default function Table<T>({
                   return (
                     <td
                       key="actions"
-                      className="px-4 py-2 border-b text-center"
+                      className="px-4 py-3 text-center border-b border-gray-300"
                     >
                       {renderActions?.(row)}
                     </td>
@@ -80,7 +81,7 @@ export default function Table<T>({
                 }
 
                 return (
-                  <td key={String(header.key)} className="px-4 py-2 border-b">
+                  <td key={String(header.key)} className="px-4 py-3 border-b border-gray-300">
                     {React.isValidElement(cellContent)
                       ? cellContent
                       : String(cellContent ?? '')}
@@ -91,37 +92,11 @@ export default function Table<T>({
           ))}
         </tbody>
       </table>
-      {onPageChange && totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 py-4 font-montserrat">
-          <button
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => onPageChange(i + 1)}
-              className={`px-3 py-1 text-sm rounded border ${
-                i + 1 === currentPage
-                  ? 'bg-black text-white'
-                  : 'border-gray-300'
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 text-sm rounded border border-gray-300 disabled:opacity-50"
-          >
-            Próximo
-          </button>
-        </div>
-      )}
+     <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+/>
     </div>
   );
 }
