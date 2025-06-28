@@ -199,7 +199,12 @@ const renderActions = (row: IAppointmentRow) =>
       <ModalAgendamento
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={isClient ? handleConfirmModal : handleUpdateRoom}
+        onConfirm={
+          (isClient
+            ? handleConfirmModal
+            : handleUpdateRoom) as (data: unknown) => void | Promise<void>
+        }
+
         role={user.role}
       />
     </>
