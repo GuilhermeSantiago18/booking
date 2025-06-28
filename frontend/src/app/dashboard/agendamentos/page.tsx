@@ -144,7 +144,7 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
   return (
     <>
       <FilterBar
-        showButton={true}
+        showButton={user.canSchedule}
         search={search}
         onSearchChange={setSearch}
         date={date}

@@ -9,6 +9,7 @@ import { useLogs } from "@/hooks/useLogs";
 import { IRole } from "@/types/User";
 import { ILogRowTable } from "@/types/Logs";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { formatDateWithTime } from "@/utils/functionsUtils";
 
 export default function Logs() {
   const { user } = useUser();
@@ -18,7 +19,7 @@ export default function Logs() {
   const [date, setDate] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  if (!user) return null;
+  if (!user || !user.canViewLogs) return <p className="font-montserrat">Não é possível carregar Logs.</p>
 
   const isAdmin = user.role === IRole.ADMIN;
 
@@ -48,10 +49,7 @@ export default function Logs() {
     client: `${log.user.firstName} ${log.user.lastName}`,
     type: log.type,
     module: log.module,
-    dateTime: `${new Date(log.createdAt).toLocaleDateString()} às ${new Date(log.createdAt).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    })}`,
+    dateTime: formatDateWithTime(log.createdAt),
   }));
 
   const sortedData = [...mappedData].sort((a, b) => {
@@ -94,7 +92,8 @@ const headers = isAdmin
               date={date}
               onDateChange={setDate}
               role={user.role} 
-              showButton={false}      />
+              showButton={false}
+     />
 
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar logs.</p>}
