@@ -24,5 +24,5 @@ export function getPlaceholder(role: string, showButton: boolean, area: 'logs' |
     if (area === 'logs') return "Filtre por atividade ou módulo";
   }
 
-  return "Filtre os dados";
+  return "Filtre por nome";
 }

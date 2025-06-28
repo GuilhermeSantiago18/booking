@@ -29,6 +29,10 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     title: 'Clientes',
     description: 'Gerencie os usuários do sistema.',
   },
+    '/dashboard/salas': {
+    title: 'Salas',
+    description: 'Crie novas salas para novos agendamentos.',
+  },
 };
 
 export default function Header() {
