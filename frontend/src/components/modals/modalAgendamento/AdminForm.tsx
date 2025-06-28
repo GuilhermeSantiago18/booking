@@ -54,7 +54,7 @@ export default function AdminForm({ rooms, onChange }: AdminFormProps) {
   const isDisabled = selectedRoomId === null;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 font-montserrat">
       <label className="text-sm font-medium text-gray-700 mb-1">Selecione a Sala</label>
       <select
         value={selectedRoomId ?? ''}
