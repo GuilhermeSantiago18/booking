@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { IRole } from "./User";
 
 export interface IClient {
@@ -27,7 +28,8 @@ export interface IClientRow {
   endereco: string;
   canSchedule: boolean;
   canViewLogs: boolean;
-  status: boolean;
+  permissoes: ReactNode;
+  status: ReactNode; 
 }
 
 export interface IUpdateClient {
