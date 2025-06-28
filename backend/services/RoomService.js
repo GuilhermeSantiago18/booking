@@ -11,9 +11,13 @@ async function createRoom(data) {
     slotDurationMinutes,
   } = data;
 
+  if (!name || !description) {
+    throw new CustomError('Preencha os campos para criar a sala', 400);
+  }
+
   const existingRoom = await Room.findOne({ where: { name } });
   if (existingRoom) {
-    throw new CustomError('Room name already exists', 409);
+    throw new CustomError('Já existe uma sala com este nome', 409);
   }
 
   const room = await Room.create({
@@ -35,7 +39,7 @@ async function listRooms() {
 async function getRoomById(id) {
   const room = await Room.findByPk(id);
   if (!room) {
-    throw CustomError('Room not found', 404);
+    throw CustomError('Sala não encontrada', 404);
   }
   return room;
 }
@@ -43,13 +47,13 @@ async function getRoomById(id) {
 async function updateRoom(id, data) {
   const room = await Room.findByPk(id);
   if (!room) {
-    throw new CustomError('Room not found', 404);
+    throw new CustomError('Sala não encontrada', 404);
   }
 
   if (data.name && data.name !== room.name) {
     const existingRoom = await Room.findOne({ where: { name: data.name } });
     if (existingRoom) {
-      throw new CustomError('Room name already exists', 409);
+      throw new CustomError('Já existe uma sala com este nome', 409);
     }
   }
 
@@ -68,7 +72,7 @@ async function updateRoom(id, data) {
 async function deleteRoom(id) {
   const room = await Room.findByPk(id);
   if (!room) {
-    throw new CustomError('Room not found', 404);
+    throw new CustomError('Sala não encontrada', 404);
   }
 
   //   const booking = await Booking.findOne({ where: { roomId: id } });

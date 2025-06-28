@@ -1,5 +1,8 @@
 
 export interface IRoom {
+  createdAt: string | Date;
+  startDate: any;
+  endDate: any;
   roomId: number;
   id: number;
   name: string;

@@ -4,12 +4,13 @@ import AdminForm from './AdminForm';
 import MainButton from '@/components/buttons/MainButton';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { IRole } from '@/types/User';
 
 interface ModalAgendamentoProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (data: unknown) => void;
-  role: 'client' | 'admin';
+  role: IRole;
 }
 
 export default function ModalAgendamento({ isOpen, onClose, onConfirm, role }: ModalAgendamentoProps) {
