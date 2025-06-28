@@ -10,6 +10,7 @@ import { IClientRow } from "@/types/Client";
 import { formatDateWithTime } from "@/utils/functionsUtils";
 import { useUser } from "@/hooks/useUser";
 import { IRole } from "@/types/User";
+import { genericFilter } from "@/utils/genericFilterForInput";
 
 
 export default function Client() {
@@ -28,12 +29,13 @@ export default function Client() {
   
     if (role !== IRole.ADMIN && role !== IRole.CLIENT) return null;
 
-  const filteredClients = (clients ?? []).filter((client) => {
-    const fullName = `${client.firstName} ${client.lastName}`.toLowerCase();
-    const searchMatch = fullName.includes(search.toLowerCase());
-    const dateMatch = date ? client.createdAt.startsWith(date) : true;
-    return searchMatch && dateMatch;
-  });
+ const filteredClients = genericFilter({
+  data: clients ?? [],
+  search,
+  searchKeys: ['firstName', 'lastName', 'email', 'city', 'state'],
+  dateKey: 'createdAt',
+  dateValue: date,
+});
 
   const sortedClients = [...filteredClients].sort((a, b) => {
     const dateA = new Date(a.createdAt).getTime();

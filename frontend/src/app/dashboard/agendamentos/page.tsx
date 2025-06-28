@@ -72,7 +72,7 @@ export default function Agendamentos() {
 const filteredAppointments = genericFilter({
   data: appointments ?? [],
   search,
-  searchKeys: ['User.firstName', 'User.lastName', 'status'],
+  searchKeys: ['User.firstName', 'User.lastName', 'status', 'Room.name'],
   dateKey: 'date',
   dateValue: date,
 });
