@@ -12,6 +12,7 @@ import { ArrowDown, ArrowUp, CircleCheck, CircleX, X, XCircle } from "lucide-rea
 import { useRooms } from "@/hooks/useRooms";
 import { IRoom } from "@/types/Room";
 import { IRole } from "@/types/User";
+import { genericFilter } from "@/utils/genericFilterForInput";
 
 export default function Agendamentos() {
   const { appointments, isLoading, error, createAppointment, updateStatusAppointment  } = useAppointments();
@@ -68,13 +69,14 @@ export default function Agendamentos() {
 
 
 
-const filteredAppointments = (appointments ?? []).filter((appointment) => {
-  const fullName = `${appointment.User.firstName} ${appointment.User.lastName}`.toLowerCase();
-  const searchMatch = fullName.includes(search.toLowerCase());
-  const dateMatch = date ? appointment.date === date : true;
-
-  return searchMatch && dateMatch;
+const filteredAppointments = genericFilter({
+  data: appointments ?? [],
+  search,
+  searchKeys: ['User.firstName', 'User.lastName', 'status'],
+  dateKey: 'date',
+  dateValue: date,
 });
+
 
 const sortedAppointments = [...filteredAppointments].sort((a, b) => {
     const dateTimeA = new Date(`${a.date}T${a.time}`).getTime();
@@ -174,6 +176,7 @@ const renderActions = (row: IAppointmentRow) =>
   return (
     <>
       <FilterBar
+        screen="agendamentos"
         showButton={true}
         search={search}
         onSearchChange={setSearch}

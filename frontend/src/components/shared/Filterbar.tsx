@@ -2,6 +2,7 @@ import CustomInput from '@/components/Inputs/CustomInput';
 import DateInput from '@/components/Inputs/DateInput';
 import MainButton from '@/components/buttons/MainButton';
 import { IRole } from '@/types/User';
+import { getPlaceholder } from '@/utils/functionsUtils';
 
 interface FilterBarProps {
   search: string;
@@ -11,7 +12,11 @@ interface FilterBarProps {
   role: IRole;
   showButton: boolean
   onActionClick?: () => void;
+  screen: "logs" | "agendamentos" | "clientes"
 }
+
+
+
 
 export default function FilterBar({
   search,
@@ -20,12 +25,13 @@ export default function FilterBar({
   onDateChange,
   role,
   onActionClick,
-  showButton
+  showButton,
+  screen
 }: FilterBarProps) {
   return (
     <div className="flex flex-col md:flex-row items-start gap-4 mb-6">
       <CustomInput
-        placeholder={role === 'admin' ? "Filtre por nome" : "Filtre por tipo de atividade ou Módulo"}
+        placeholder={getPlaceholder(role, showButton, screen)}
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
       />

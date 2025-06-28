@@ -10,6 +10,7 @@ import { IRole } from "@/types/User";
 import { ILogRowTable } from "@/types/Logs";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { formatDateWithTime } from "@/utils/functionsUtils";
+import { genericFilter } from "@/utils/genericFilterForInput";
 
 export default function Logs() {
   const { user } = useUser();
@@ -24,25 +25,15 @@ export default function Logs() {
 
   const isAdmin = user.role === IRole.ADMIN;
 
-  const filteredLogs = (logs ?? []).filter(log => {
-  if (isAdmin) {
-    const fullName = `${log.user.firstName} ${log.user.lastName}`.toLowerCase();
-    const searchMatch = fullName.includes(search.toLowerCase());
-    const dateMatch = date
-      ? new Date(log.createdAt).toISOString().slice(0, 10) === date
-      : true;
-    return searchMatch && dateMatch;
-  } else {
-    const searchLower = search.toLowerCase();
-    const searchMatch =
-      log.type.toLowerCase().includes(searchLower) ||
-      log.module.toLowerCase().includes(searchLower);
-    const dateMatch = date
-      ? new Date(log.createdAt).toISOString().slice(0, 10) === date
-      : true;
-    return searchMatch && dateMatch;
-  }
-});
+      const filteredLogs = genericFilter({
+      data: logs ?? [],
+      search,
+      searchKeys: isAdmin
+        ? ['user.firstName', 'user.lastName', 'type', 'module']
+        : ['type', 'module'],
+      dateKey: 'createdAt',
+      dateValue: date,
+    });
 
 
   const mappedData: ILogRowTable[] = filteredLogs.map(log => ({
@@ -87,7 +78,8 @@ const headers = isAdmin
 
   return (
     <>
-      <FilterBar
+      <FilterBar    
+              screen="logs"
               search={search}
               onSearchChange={setSearch}
               date={date}

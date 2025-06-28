@@ -9,10 +9,12 @@ import { IRole } from "@/types/User";
 import { ArrowDown, ArrowUp, CheckCircle, XCircle } from "lucide-react";
 import { IClientRow } from "@/types/Client";
 import { formatDateWithTime } from "@/utils/functionsUtils";
+import { useUser } from "@/hooks/useUser";
 
 
 export default function Client() {
   const { clients, isLoading, error, updateClient} = useCLients();
+  const {user} = useUser()
   const [search, setSearch] = useState('');
   const [date, setDate] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -79,11 +81,12 @@ export default function Client() {
   return (
     <>
       <FilterBar
+        screen="clientes"
         search={search}
         onSearchChange={setSearch}
         date={date}
         onDateChange={setDate}
-        role={IRole.ADMIN}
+        role={IRole.CLIENT}
         showButton={false}
       />
 
