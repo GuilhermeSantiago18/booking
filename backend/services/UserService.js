@@ -22,7 +22,7 @@ async function registerClient(data) {
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
-  if (userExists) throw new CustomError('Email already registered', 409);
+  if (userExists) throw new CustomError('Conta já registrada', 409);
 
   if (password.length < 6) {
   throw new CustomError('A senha deve ter pelo menos 6 caracteres', 400);
@@ -82,7 +82,7 @@ async function login({ email, password }) {
 
 async function update(userId, data) {
   const user = await User.findByPk(userId);
-  if (!user) throw new CustomError('User not found', 404);
+  if (!user) throw new CustomError('Usuário não encontrado', 404);
 
   const {
     firstName,
