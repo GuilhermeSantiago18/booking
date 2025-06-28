@@ -73,13 +73,8 @@ async function deleteAppointment(userId, appointmentId, userRole) {
   await Appointment.destroy({ where: { id: appointmentId } });
 }
 
-async function updateStatusAppointment(appointmentId, userRole, status) {
-  if (userRole !== 'admin') {
-    const error = new Error('Acesso negado: apenas admins podem confirmar agendamentos', 401);
-    error.status = 403;
-    throw error;
-  }
-
+async function updateStatusAppointment(appointmentId, status) {
+ 
   const appointment = await Appointment.findByPk(appointmentId);
 
   if (!appointment) {

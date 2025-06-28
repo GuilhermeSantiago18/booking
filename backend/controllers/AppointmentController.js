@@ -49,7 +49,7 @@ async function updateStatusAppointment(req, res, next) {
 
     console.log(status)
 
-    await AppointmentService.updateStatusAppointment(id, userRole, status);
+    await AppointmentService.updateStatusAppointment(id, status);
     return res.status(204).send();
   } catch (err) {
     next(err);
