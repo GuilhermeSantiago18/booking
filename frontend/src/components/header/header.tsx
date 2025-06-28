@@ -44,7 +44,7 @@ export default function Header() {
   return (
     <header className="flex justify-between items-center w-full p-6 bg-[#F6F4F1] border-b-2 border-gray-300 font-montserrat">
   <div className="flex items-center gap-4">
-    <Image src="/assets/logo.svg" alt="Logo" width={60} height={60} />
+    <Image src="/assets/Logo.svg" alt="Logo" width={60} height={60} />
     
     {metadata && (
       <div className="ml-0 md:ml-42">
