@@ -1,7 +1,7 @@
 'use client'
 
 import FilterBar from "@/components/shared/Filterbar";
-import Table from "@/components/table/Table";
+import Table, { Column } from "@/components/table/Table";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import ModalAgendamento from "@/components/modals/ModalAgendamento";
@@ -137,6 +137,40 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
+const headers: Column<IAppointmentRow>[] = [
+  {
+    label: (
+      <button onClick={handleSortClick} className="flex items-center cursor-pointer">
+        Data de agendamento
+        {sortOrder === 'asc' ? (
+          <ArrowUp size={20} className="ml-2" />
+        ) : (
+          <ArrowDown size={20} className="ml-2" />
+        )}
+      </button>
+    ),
+    key: 'date',
+  },
+  { label: 'Nome', key: 'nome' },
+  { label: 'Sala de agendamento', key: 'roomName' },
+  { label: 'Status transação', key: 'status' },
+  { label: 'Ação', key: 'actions' },
+];
+
+const getRowClassName = (row: IAppointmentRow) => {
+  if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
+  if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
+  return 'bg-white';
+};
+
+const renderActions = (row: IAppointmentRow) =>
+  renderAppointmentActions({
+    row,
+    userRole: user.role,
+    updateStatus: updateStatusAppointment,
+  });
+
+
   return (
     <>
       <FilterBar
@@ -151,42 +185,15 @@ function renderAppointmentActions({ row, userRole, updateStatus }: ActionProps) 
 
       {isLoading && <Loading />}
       {error && <p>Erro ao carregar agendamentos.</p>}
-     
-      <Table<IAppointmentRow>
+     <Table<IAppointmentRow>
+        headers={headers}
+        data={mappedData}
+        currentPage={currentPage}
         onPageChange={setCurrentPage}
-  headers={[
-    {
-      label: (
-        <button onClick={handleSortClick} className="flex items-center cursor-pointer">
-          Data de agendamento
-          {sortOrder === 'asc' ? (
-            <ArrowUp size={20} className="ml-2" />
-          ) : (
-            <ArrowDown size={20} className="ml-2" />
-          )}
-        </button>
-      ),
-      key: 'date',
-    },
-    { label: 'Nome', key: 'nome' },
-    { label: 'Sala de agendamento', key: 'roomName' },
-    { label: 'Status transação', key: 'status' },
-    { label: 'Ação', key: 'actions' },
-  ]}
-  data={mappedData}
-  getRowClassName={(row) => {
-    if (row.status === 'CONFIRMADO') return 'bg-[#F2FFFD]';
-    if (row.status === 'RECUSADO') return 'bg-[#FFF3F3]';
-    return 'bg-white';
-  }}
-  renderActions={(row) =>
-    renderAppointmentActions({
-      row,
-      userRole: user.role,
-      updateStatus: updateStatusAppointment,
-    })
-  }
-/>
+        getRowClassName={getRowClassName}
+        renderActions={renderActions}
+      />
+
 
 
       <ModalAgendamento

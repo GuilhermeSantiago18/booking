@@ -101,6 +101,7 @@ const headers = isAdmin
 
    <Table<ILogRowTable>
         onPageChange={setCurrentPage}
+        currentPage={currentPage}
         headers={headers}
         data={sortedData}
         />

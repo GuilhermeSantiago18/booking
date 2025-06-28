@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface Column<T> {
+export interface Column<T> {
   label: string | React.ReactNode;
   key: keyof T | string;
 }
@@ -92,7 +92,7 @@ export default function Table<T>({
         </tbody>
       </table>
       {onPageChange && totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 py-4">
+        <div className="flex justify-center items-center gap-2 py-4 font-montserrat">
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
