@@ -16,11 +16,24 @@ export function useUser() {
 
   const updateMutation = useMutation({
     mutationFn: updateUser,
+    onMutate: async (newUserData: IUserFormData) => {
+           queryClient.cancelQueries({queryKey: ['user']})
+      const previousUserData = queryClient.getQueryData<IUserFormData>(['user']);
+      queryClient.setQueryData(['user'], newUserData);
+      return { previousUserData };
+    },
+    onError: (err, newUserData, context) => {
+      if (context?.previousUserData) {
+        queryClient.setQueryData(['user'], context.previousUserData);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({queryKey: ['user']});
+      queryClient.invalidateQueries({queryKey: ['logs']});
+    },
     onSuccess: () => {
       toast.success('Perfil atualizado com sucesso!');
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      queryClient.invalidateQueries({ queryKey: ['logs'] }); 
-    },
+    }
   });
 
   return {
@@ -28,5 +41,5 @@ export function useUser() {
     isLoading,
     error,
     updateUser: updateMutation,
-  }
+  };
 }
