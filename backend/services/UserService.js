@@ -100,9 +100,13 @@ async function update(userId, data) {
     status
   } = data;
 
+  await fetchAddressByCep(postalCode);
+
   if (password) {
     user.password = await bcryptjs.hash(password, 10);
   }
+
+
 
   user.firstName = firstName ?? user.firstName;
   user.lastName = lastName ?? user.lastName;
@@ -116,6 +120,10 @@ async function update(userId, data) {
   user.canSchedule = canSchedule ?? user.canSchedule
   user.canViewLogs = canViewLogs ?? user.canViewLogs
   user.status = status ?? user.status
+
+    if (!user.firstName || !user.lastName) {
+     throw new CustomError('Preencha os campos obrigatórios', 400);
+    }
 
   await user.save();
   return user;

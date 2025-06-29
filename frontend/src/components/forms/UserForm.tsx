@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import CustomInput from '../Inputs/CustomInput';
 import MainButton from '../buttons/MainButton';
 import { checkCep } from '@/services/checkCep';
@@ -154,8 +154,8 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
       />
 
       <CustomInput
-        label="Senha de acesso"
-        titleRight="(Obrigatório)"
+        label={isEditMode ? "Nova senha de acesso" : "Senha de acesso"}
+        titleRight={isEditMode ? "" : "(Obrigatório)"}
         onChange={(e) => setPassword(e.target.value)}
         type="password"
         placeholder={isEditMode ? 'Nova senha' : 'Insira sua senha'}
