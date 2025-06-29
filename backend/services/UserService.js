@@ -5,8 +5,7 @@ const { fetchAddressByCep } = require('./CepService');
 const { createLog } = require('./LogService');
 const CustomError = require('../errors/CustomError');
 
-async function registerClient(data) {
-  console.log("data", data)
+async function createUser(data) {
   const {
     firstName,
     lastName,
@@ -15,22 +14,20 @@ async function registerClient(data) {
     postalCode,
     number,
     complement,
-    status,
-    canSchedule,
-    canViewLogs
+    role,
+    status = true,
+    canSchedule = true,
+    canViewLogs = true
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
   if (userExists) throw new CustomError('Conta já registrada', 409);
 
-  if (password.length < 6) {
-  throw new CustomError('A senha deve ter pelo menos 6 caracteres', 400);
-}
+  if (!password || password.length < 6) {
+    throw new CustomError('A senha deve ter pelo menos 6 caracteres', 400);
+  }
 
-  const { street, district, city, state, cep } =
-    await fetchAddressByCep(postalCode);
-
-  console.log('Endereco recebido:', { street, district, city, state });
+  const { street, district, city, state, cep } = await fetchAddressByCep(postalCode);
 
   const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -46,13 +43,21 @@ async function registerClient(data) {
     district,
     city,
     state,
-    role: 'client',
+    role,
     status,
-    canViewLogs,
-    canSchedule
+    canSchedule,
+    canViewLogs
   });
 
   return user;
+}
+
+async function registerClient(data) {
+  return await createUser({ ...data, role: 'client' });
+}
+
+async function registerAdmin(data) {
+  return await createUser({ ...data, role: 'admin' });
 }
 
 async function login({ email, password }) {
@@ -137,7 +142,9 @@ async function getUserByID(id) {
 
 module.exports = {
   registerClient,
+  registerAdmin,
   login,
   update,
-  getUserByID
+  getUserByID,
+  
 };
