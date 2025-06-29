@@ -5,8 +5,7 @@ const { fetchAddressByCep } = require('./CepService');
 const { createLog } = require('./LogService');
 const CustomError = require('../errors/CustomError');
 
-async function registerClient(data) {
-  console.log("data", data)
+async function createUser(data) {
   const {
     firstName,
     lastName,
@@ -16,22 +15,19 @@ async function registerClient(data) {
     number,
     complement,
     role,
-    status,
-    canSchedule,
-    canViewLogs
+    status = true,
+    canSchedule = true,
+    canViewLogs = true
   } = data;
 
   const userExists = await User.findOne({ where: { email } });
-  if (userExists) throw new CustomError('Email already registered', 409);
+  if (userExists) throw new CustomError('Conta já registrada', 409);
 
-  if (password.length < 6) {
-  throw new CustomError('A senha deve ter pelo menos 6 caracteres', 400);
-}
+  if (!password || password.length < 6) {
+    throw new CustomError('A senha deve ter pelo menos 6 caracteres', 400);
+  }
 
-  const { street, district, city, state, cep } =
-    await fetchAddressByCep(postalCode);
-
-  console.log('Endereco recebido:', { street, district, city, state });
+  const { street, district, city, state, cep } = await fetchAddressByCep(postalCode);
 
   const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -47,13 +43,21 @@ async function registerClient(data) {
     district,
     city,
     state,
-    role: role,
+    role,
     status,
-    canViewLogs,
-    canSchedule
+    canSchedule,
+    canViewLogs
   });
 
   return user;
+}
+
+async function registerClient(data) {
+  return await createUser({ ...data, role: 'client' });
+}
+
+async function registerAdmin(data) {
+  return await createUser({ ...data, role: 'admin' });
 }
 
 async function login({ email, password }) {
@@ -82,7 +86,7 @@ async function login({ email, password }) {
 
 async function update(userId, data) {
   const user = await User.findByPk(userId);
-  if (!user) throw new CustomError('User not found', 404);
+  if (!user) throw new CustomError('Usuário não encontrado', 404);
 
   const {
     firstName,
@@ -100,9 +104,13 @@ async function update(userId, data) {
     status
   } = data;
 
+  await fetchAddressByCep(postalCode);
+
   if (password) {
     user.password = await bcryptjs.hash(password, 10);
   }
+
+
 
   user.firstName = firstName ?? user.firstName;
   user.lastName = lastName ?? user.lastName;
@@ -117,6 +125,10 @@ async function update(userId, data) {
   user.canViewLogs = canViewLogs ?? user.canViewLogs
   user.status = status ?? user.status
 
+    if (!user.firstName || !user.lastName) {
+     throw new CustomError('Preencha os campos obrigatórios', 400);
+    }
+
   await user.save();
   return user;
 }
@@ -130,7 +142,9 @@ async function getUserByID(id) {
 
 module.exports = {
   registerClient,
+  registerAdmin,
   login,
   update,
-  getUserByID
+  getUserByID,
+  
 };

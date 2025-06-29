@@ -1,14 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import CustomInput from '../Inputs/CustomInput';
 import MainButton from '../buttons/MainButton';
 import { checkCep } from '@/services/checkCep';
 import Loading from '../Loading';
-
 import { useQueryClient } from '@tanstack/react-query';
 import { IRole, IUserFormData } from '@/types/User';
-
 
 interface Address {
   street: string;
@@ -23,14 +21,14 @@ interface UserFormProps {
   onSubmit: (data: IUserFormData) => Promise<void>;
 }
 
-
 export default function UserForm({ mode, initialData, onSubmit }: UserFormProps) {
   const queryClient = useQueryClient();
+
   const [firstName, setFirstName] = useState(initialData.firstName || '');
   const [lastName, setLastName] = useState(initialData.lastName || '');
   const [email, setEmail] = useState(initialData.email || '');
   const [password, setPassword] = useState('');
-  const [postalCode, setPostalCode] = useState(initialData.postalCode || '');
+  const [postalCode, setPostalCode] = useState(initialData.cep || '');
   const [address, setAddress] = useState<Address>({
     street: initialData.street || '',
     city: initialData.city || '',
@@ -40,6 +38,8 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
   const [number, setNumber] = useState(initialData.number || '');
   const [complement, setComplement] = useState(initialData.complement || '');
   const [load, setLoad] = useState(false);
+
+  const isEditMode = mode === 'edit';
 
   const inputBgClass = address.city ? 'bg-[#F0F0F0]' : 'bg-transparent';
 
@@ -62,11 +62,11 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
             district: data.district || data.bairro || '',
           });
         }
-     } catch (error) {
-       console.error('error user form', error)
-} finally {
-  setLoad(false);
-}
+      } catch (error) {
+        console.error('error user form', error);
+      } finally {
+        setLoad(false);
+      }
     } else {
       setAddress({ street: '', city: '', state: '', district: '' });
       setNumber('');
@@ -77,7 +77,7 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = {
+    const payload: IUserFormData = {
       firstName,
       lastName,
       email,
@@ -89,43 +89,147 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
       role: IRole.CLIENT,
       canViewLogs: true,
       canSchedule: true,
-      status: true
+      status: true,
+      cep: ''
     };
 
-     queryClient.setQueryData(['user'], payload);
-
+    queryClient.setQueryData(['user'], payload);
     await onSubmit(payload);
   };
 
-  const isEditMode = mode === 'edit';
-  const isFormValidForEdit = postalCode.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+  const isFormChanged = useMemo(() => {
+    return (
+      firstName !== initialData.firstName ||
+      lastName !== initialData.lastName ||
+      email !== initialData.email ||
+      postalCode !== initialData.cep ||
+      address.street !== initialData.street ||
+      address.city !== initialData.city ||
+      address.state !== initialData.state ||
+      address.district !== initialData.district ||
+      number !== initialData.number ||
+      complement !== initialData.complement ||
+      password.trim() !== ''
+    );
+  }, [
+    firstName,
+    lastName,
+    email,
+    postalCode,
+    address,
+    number,
+    complement,
+    password,
+    initialData,
+  ]);
 
   return (
-    <form className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col max-w-md bg-white p-4 md:p-8 rounded shadow-md"
+      onSubmit={handleSubmit}
+    >
       <div className="flex gap-x-4">
-        <CustomInput label="Nome" titleRight="(Obrigatório)" onChange={(e) => setFirstName(e.target.value)} placeholder="Ex: Jose" value={firstName} />
-        <CustomInput label="Sobrenome" titleRight="(Obrigatório)" onChange={(e) => setLastName(e.target.value)} placeholder="Ex: Lima" value={lastName} />
+        <CustomInput
+          label="Nome"
+          titleRight="(Obrigatório)"
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="Ex: Jose"
+          value={firstName}
+        />
+        <CustomInput
+          label="Sobrenome"
+          titleRight="(Obrigatório)"
+          onChange={(e) => setLastName(e.target.value)}
+          placeholder="Ex: Lima"
+          value={lastName}
+        />
       </div>
 
-      <CustomInput label="E-mail" titleRight="(Obrigatório)" onChange={(e) => setEmail(e.target.value)} placeholder="Insira seu email" value={email} readOnly={mode === 'edit'} />
+      <CustomInput
+        label="E-mail"
+        titleRight="(Obrigatório)"
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Insira seu email"
+        value={email}
+        readOnly={isEditMode}
+      />
 
-      <CustomInput label="Senha de acesso" titleRight="(Obrigatório)" onChange={(e) => setPassword(e.target.value)} type="password" placeholder={mode === 'edit' ? 'Nova senha': 'Insira sua senha'} value={password} />
+      <CustomInput
+        label={isEditMode ? "Nova senha de acesso" : "Senha de acesso"}
+        titleRight={isEditMode ? "" : "(Obrigatório)"}
+        onChange={(e) => setPassword(e.target.value)}
+        type="password"
+        placeholder={isEditMode ? 'Nova senha' : 'Insira sua senha'}
+        value={password}
+      />
 
-
-      <CustomInput label="CEP" titleRight="(Obrigatório)" value={postalCode} onChange={handleCepChange} maxLength={9} placeholder="Insira seu CEP" />
+      <CustomInput
+        label="CEP"
+        titleRight="(Obrigatório)"
+        value={postalCode}
+        onChange={handleCepChange}
+        maxLength={9}
+        placeholder="Insira seu CEP"
+      />
 
       {address.city && (
         <>
-          <CustomInput label="Endereço" value={address.street} onChange={(e) => setAddress((prev) => ({ ...prev, street: e.target.value }))} placeholder="Rua, avenida, etc." inputClassName={inputBgClass} />
-          <CustomInput label="Número" value={number} onChange={(e) => setNumber(e.target.value)} placeholder="Número" />
-          <CustomInput label="Complemento" value={complement} onChange={(e) => setComplement(e.target.value)} placeholder="Apartamento, bloco, etc." />
-          <CustomInput label="Bairro" value={address.district} onChange={(e) => setAddress((prev) => ({ ...prev, district: e.target.value }))} placeholder="Bairro" inputClassName={inputBgClass} />
-          <CustomInput label="Cidade" value={address.city} onChange={(e) => setAddress((prev) => ({ ...prev, city: e.target.value }))} placeholder="Cidade" inputClassName={inputBgClass} />
-          <CustomInput label="Estado" value={address.state} onChange={(e) => setAddress((prev) => ({ ...prev, state: e.target.value }))} placeholder="Estado" inputClassName={inputBgClass} />
+          <CustomInput
+            label="Endereço"
+            value={address.street}
+            onChange={(e) =>
+              setAddress((prev) => ({ ...prev, street: e.target.value }))
+            }
+            placeholder="Rua, avenida, etc."
+            inputClassName={inputBgClass}
+          />
+          <CustomInput
+            label="Número"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            placeholder="Número"
+          />
+          <CustomInput
+            label="Complemento"
+            value={complement}
+            onChange={(e) => setComplement(e.target.value)}
+            placeholder="Apartamento, bloco, etc."
+          />
+          <CustomInput
+            label="Bairro"
+            value={address.district}
+            onChange={(e) =>
+              setAddress((prev) => ({ ...prev, district: e.target.value }))
+            }
+            placeholder="Bairro"
+            inputClassName={inputBgClass}
+          />
+          <CustomInput
+            label="Cidade"
+            value={address.city}
+            onChange={(e) =>
+              setAddress((prev) => ({ ...prev, city: e.target.value }))
+            }
+            placeholder="Cidade"
+            inputClassName={inputBgClass}
+          />
+          <CustomInput
+            label="Estado"
+            value={address.state}
+            onChange={(e) =>
+              setAddress((prev) => ({ ...prev, state: e.target.value }))
+            }
+            placeholder="Estado"
+            inputClassName={inputBgClass}
+          />
         </>
       )}
 
-      <MainButton type="submit" className="font-montserrat font-medium mt-2" disabled={isEditMode && !isFormValidForEdit}>
+      <MainButton
+        type="submit"
+        className="font-montserrat font-medium mt-2"
+        disabled={isEditMode && !isFormChanged}
+      >
         {mode === 'register' ? 'Cadastrar-se' : 'Atualizar Dados'}
       </MainButton>
 

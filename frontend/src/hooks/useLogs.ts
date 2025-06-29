@@ -7,7 +7,7 @@ export function useLogs() {
   const { data, isLoading, error } = useQuery<ILogs[]>({
     queryKey: ['logs'],
     queryFn: getAllLogs,
-    staleTime: 1000 * 60 * 30,
+    staleTime: 0,
     retry: 1,
     refetchOnWindowFocus: false,
   });

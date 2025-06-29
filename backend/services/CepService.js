@@ -13,7 +13,7 @@ async function fetchAddressByCep(cep) {
   );
 
   if (response.data.erro) {
-    throw new CustomError('CEP not found', 404);
+    throw new CustomError('CEP não encontrado', 404);
   }
 
   const { localidade, estado, bairro, logradouro } = response.data;

@@ -49,7 +49,7 @@ export default function LoginForm() {
         <CustomInput
           label="E-mail"
           titleRight="(Obrigatório)"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.toLocaleLowerCase())}
           placeholder="Insira seu email"
           value={email}
           required

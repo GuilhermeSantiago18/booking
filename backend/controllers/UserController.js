@@ -1,5 +1,14 @@
 const UserService = require('../services/UserService');
 
+async function registerAdmin(req, res, next) {
+  try {
+    const user = await UserService.registerAdmin(req.body);
+    res.status(201).json({ user, message: 'Admin created successfully' });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function register(req, res, next) {
   try {
     const user = await UserService.registerClient(req.body);
@@ -44,5 +53,6 @@ module.exports = {
   register,
   login,
   updateUser,
-  getUserByID
+  getUserByID,
+  registerAdmin
 };
