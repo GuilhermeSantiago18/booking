@@ -15,7 +15,6 @@ async function registerClient(data) {
     postalCode,
     number,
     complement,
-    role,
     status,
     canSchedule,
     canViewLogs
@@ -47,7 +46,7 @@ async function registerClient(data) {
     district,
     city,
     state,
-    role: role,
+    role: 'client',
     status,
     canViewLogs,
     canSchedule
