@@ -5,6 +5,7 @@ export interface IUser {
 }
 
 export interface IUserFormData {
+  cep: string;
   firstName: string;
   lastName: string;
   email: string;

@@ -90,6 +90,7 @@ export default function UserForm({ mode, initialData, onSubmit }: UserFormProps)
       canViewLogs: true,
       canSchedule: true,
       status: true,
+      cep: ''
     };
 
     queryClient.setQueryData(['user'], payload);

@@ -23,7 +23,8 @@ export default function RegisterPage() {
     role: IRole.CLIENT,
     canViewLogs: false,
     canSchedule: false,
-    status: false
+    status: false,
+    cep: ""
   };
 
   
