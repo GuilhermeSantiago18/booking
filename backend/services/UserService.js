@@ -20,6 +20,8 @@ async function createUser(data) {
     canViewLogs = true
   } = data;
 
+    if (!email || !firstName || !lastName ) throw new CustomError('Preencha todos os campos obrigatórios', 400);
+  
   const userExists = await User.findOne({ where: { email } });
   if (userExists) throw new CustomError('Conta já registrada', 409);
 
