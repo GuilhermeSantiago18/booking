@@ -18,7 +18,7 @@ export const metadata = {
   title: 'Goold Booking',
   description: 'Sistema inteligente de agendamento e reuniões',
   icons: {
-    icon: '/assets/Goold.svg',
+    icon: '/assets/Logo.svg',
   },
 };
 
@@ -30,7 +30,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1E293B" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body
         className={`${montserrat.variable} antialiased`}
       >
