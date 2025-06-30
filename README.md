@@ -84,7 +84,7 @@ npm install
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=admin
-DB_PASSWORD=admin
+DB_PASS=admin
 DB_NAME=booking
 JWT_SECRET=sua_chave_secreta
 ```
