@@ -5,7 +5,7 @@ async function fetchAddressByCep(cep) {
   const cleanCep = cep.replace(/\D/g, '');
 
   if (cleanCep.length !== 8) {
-    throw new CustomError('Invalid CEP format', 400);
+    throw new CustomError('CEP com formato inválido', 400);
   }
 
   const response = await axios.get(
